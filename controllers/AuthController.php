@@ -1,57 +1,64 @@
 <?php
-require_once 'models/Utente.php';
+
+ require_once 'repositories/UtenteRepository.php';
 
 class AuthController {
+    protected $repo;
+
+    public function __construct() {
+        $this->repo = new UtenteRepository();
+    }
+
     public function showLogin($request) {
-        require 'views/login.php';
+        return view('login');
     }
 
     public function login($request) {
-        $utente = new Utente();
-        $user = $utente->login($request['email'], $request['password']);
-        if ($user) {
-            $_SESSION['user'] = $user;
-            header("Location: /mini3/");
+        $user = $this->repo->findByEmail($request['email']);
+
+        if ($user && password_verify($request['password'], $user->password)) {
+            $_SESSION['user'] = $user->toSessionArray();
+            header("Location: /");
             exit;
         } else {
             echo "Credenziali non valide";
         }
     }
 
-    public function logout($request) {
+    public function logout() {
         session_destroy();
-        header("Location: /mini3/login");
+        header("Location: /login");
         exit;
     }
 
-    public function deleteUser($request) {
+    public function deleteUser() {
         if (!isset($_SESSION['user'])) {
             http_response_code(401);
             echo "Non autorizzato.";
             return;
         }
-    
-        $utente = new Utente();
-        $utente->delete($_SESSION['user']['id']);
-    
+
+        $this->repo->deleteById($_SESSION['user']['id']);
         unset($_SESSION['user']);
         echo "Il tuo account è stato cancellato.";
     }
-    
 
-    public function showRegister($request) {
-        require 'views/register.php';
+    public function showRegister() {
+        return view('register');
     }
 
     public function register($request) {
-        $utente = new Utente();
-        $user = $utente->register($request['nome'], $request['email'], $request['password'], $request['ruolo'] ?? 'user');
-        if ($user) {
-            $_SESSION['user'] = $user;
-            header("Location: /mini3/");
-            exit;
-        } else {
-            echo "Utente giÃ  registrato";
+        $existing = $this->repo->findByEmail($request['email']);
+
+        if ($existing) {
+            echo "Utente già registrato";
+            return;
         }
+
+        $user = $this->repo->create($request);
+        $_SESSION['user'] = $user->toSessionArray();
+
+        header("Location: /");
+        exit;
     }
 }

@@ -2,7 +2,7 @@
 
 class Router {
     private array $routes;
-    private string $basePath = '/mini3';
+    private string $basePath = '/gestore-eventi';
 
     public function __construct(array $routes) {
         $this->routes = $routes;

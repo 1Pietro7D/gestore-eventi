@@ -1,6 +1,6 @@
-<h1>Lista Utenti</h1>
+<h2>Utenti</h2>
 <ul>
 <?php foreach ($dati as $utente): ?>
-    <li><?= htmlspecialchars($utente['nome']) ?> (<?= $utente['ruolo'] ?>)</li>
+    <li><?= $utente->nome ?> - <?= $utente->ruolo ?></li>
 <?php endforeach; ?>
 </ul>

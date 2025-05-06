@@ -1,5 +1,5 @@
 <h1>Registrazione</h1>
-<form method="POST" action="/mini3/register">
+<form method="POST" action="/register">
     <label>Nome: <input type="text" name="nome" required></label><br>
     <label>Email: <input type="email" name="email" required></label><br>
     <label>Password: <input type="password" name="password" required></label><br>

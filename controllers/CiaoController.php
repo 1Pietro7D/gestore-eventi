@@ -1,10 +1,11 @@
 <?php
-require_once 'models/Utente.php';
+require_once 'repositories/UtenteRepository.php';
 
 class CiaoController {
-    public function index($request) {
-        $utente = new Utente();
-        $dati = $utente->getUtenti();
-        require 'views/ciao.php';
+    public function index() {
+        $repo = new UtenteRepository();
+        $dati = $repo->all();
+
+        return view('ciao', compact('dati'));
     }
 }

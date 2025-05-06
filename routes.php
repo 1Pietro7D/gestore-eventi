@@ -1,7 +1,7 @@
 <?php
 return [
-    [ 'method' => 'GET', 'url' => '/', 'handler' => 'HomeController@index', 'authorized' => true, 'role' => ['admin', 'user'] ],
-    [ 'method' => 'GET', 'url' => '/ciao', 'handler' => 'CiaoController@index' ],
+    [ 'method' => 'GET', 'url' => '/', 'handler' => 'HomeController@index'],
+    [ 'method' => 'GET', 'url' => '/ciao', 'handler' => 'CiaoController@index', 'authorized' => true, 'role' => ['admin', 'user']  ],
     [ 'method' => 'GET', 'url' => '/login', 'handler' => 'AuthController@showLogin' ],
     [ 'method' => 'POST', 'url' => '/login', 'handler' => 'AuthController@login' ],
     [ 'method' => 'GET', 'url' => '/logout', 'handler' => 'AuthController@logout' ],
