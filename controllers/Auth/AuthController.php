@@ -1,6 +1,6 @@
 <?php
 
- require_once 'repositories/UtenteRepository.php';
+ //require_once 'repositories/UtenteRepository.php';
 
 class AuthController {
     protected $repo;
@@ -40,7 +40,7 @@ class AuthController {
 
         $this->repo->deleteById($_SESSION['user']['id']);
         unset($_SESSION['user']);
-        echo "Il tuo account è stato cancellato.";
+        echo "Il tuo account ï¿½ stato cancellato.";
     }
 
     public function showRegister() {
@@ -51,7 +51,7 @@ class AuthController {
         $existing = $this->repo->findByEmail($request['email']);
 
         if ($existing) {
-            echo "Utente già registrato";
+            echo "Utente giï¿½ registrato";
             return;
         }
 

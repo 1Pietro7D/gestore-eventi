@@ -5,7 +5,7 @@ class Router {
     private string $basePath = '/gestore-eventi';
 
     public function __construct(array $routes) {
-        $this->routes = $routes;
+        $this->routes = $this->prepareRoutes($routes);
     }
 
     public function handle(string $method, string $uri) {
@@ -18,17 +18,17 @@ class Router {
         }
 
         foreach ($this->routes as $route) {
-            if ($route['method'] === $method && $route['url'] === $uri) {
-                return $this->dispatch($route);
+            if ($route['method'] === $method && preg_match($route['pattern'], $uri, $matches)) {
+                array_shift($matches); // Rimuove il match completo
+                return $this->dispatch($route, $matches);
             }
         }
 
         http_response_code(404);
         require 'views/404.php';
-        return;
     }
 
-    private function dispatch(array $route) {
+    private function dispatch(array $route, array $params = []) {
         if (!empty($route['authorized'])) {
             if (!isset($_SESSION['user'])) {
                 http_response_code(401);
@@ -43,18 +43,57 @@ class Router {
             }
         }
 
-        [$controllerName, $methodName] = explode('@', $route['handler']);
-        $controllerPath = "controllers/$controllerName.php";
+        [$controllerPathPart, $methodName] = explode('@', $route['handler'] . '@index');
 
-        if (file_exists($controllerPath)) {
-            require_once $controllerPath;
-            $controller = new $controllerName;
-            if (method_exists($controller, $methodName)) {
-                return $controller->$methodName($_REQUEST);
-            }
+        $controllerPath = __DIR__ . '/../controllers/' . $controllerPathPart . '.php';
+
+        if (!file_exists($controllerPath)) {
+            http_response_code(500);
+            echo "Controller file not found: $controllerPath";
+            return;
         }
 
-        http_response_code(500);
-        echo "Handler not found";
+        require_once $controllerPath;
+
+        $controllerClassName = basename($controllerPathPart);
+
+        if (!class_exists($controllerClassName)) {
+            http_response_code(500);
+            echo "Class $controllerClassName not found in $controllerPath";
+            return;
+        }
+
+        $controller = new $controllerClassName;
+
+        if (!method_exists($controller, $methodName)) {
+            http_response_code(500);
+            echo "Method $methodName not found in $controllerClassName";
+            return;
+        }
+
+        if (empty($params)) {
+            $params = [$_REQUEST]; // passa i dati POST/GET
+        }
+
+        $result = $controller->$methodName(...$params);
+
+        if ($result === null) {
+            http_response_code(404);
+            require 'views/404.php';
+            exit;
+        }
+
+        echo $result;
+        return;
+    }
+
+    private function prepareRoutes(array $routes): array {
+        foreach ($routes as &$route) {
+            if (!isset($route['pattern'])) {
+                $pattern = preg_replace('#\{[^/]+\}#', '([^/]+)', $route['url']);
+                $route['pattern'] = '#^' . $pattern . '$#';
+            }
+        }
+        return $routes;
     }
 }

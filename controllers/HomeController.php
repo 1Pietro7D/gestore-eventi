@@ -1,7 +1,7 @@
 <?php
 
 class HomeController {
-    public function index($request) {
+    public function index() {
         return view('home');
     }
 }
