@@ -3,10 +3,10 @@
  //require_once 'repositories/UtenteRepository.php';
 
 class AuthController {
-    protected $repo;
+    protected $utenteRepository;
 
     public function __construct() {
-        $this->repo = new UtenteRepository();
+        $this->utenteRepository = new UtenteRepository();
     }
 
     public function showLogin($request) {
@@ -14,7 +14,7 @@ class AuthController {
     }
 
     public function login($request) {
-        $user = $this->repo->findByEmail($request['email']);
+        $user = $this->utenteRepository->findByEmail($request['email']);
 
         if ($user && password_verify($request['password'], $user->password)) {
             $_SESSION['user'] = $user->toSessionArray();
@@ -38,7 +38,7 @@ class AuthController {
             return;
         }
 
-        $this->repo->deleteById($_SESSION['user']['id']);
+        $this->utenteRepository->deleteById($_SESSION['user']['id']);
         unset($_SESSION['user']);
         echo "Il tuo account � stato cancellato.";
     }
@@ -48,14 +48,14 @@ class AuthController {
     }
 
     public function register($request) {
-        $existing = $this->repo->findByEmail($request['email']);
+        $existing = $this->utenteRepository->findByEmail($request['email']);
 
         if ($existing) {
             echo "Utente gi� registrato";
             return;
         }
 
-        $user = $this->repo->create($request);
+        $user = $this->utenteRepository->create($request);
         $_SESSION['user'] = $user->toSessionArray();
 
         header("Location: /");
