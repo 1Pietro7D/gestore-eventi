@@ -9,7 +9,7 @@ class AuthController {
         $this->utenteRepository = new UtenteRepository();
     }
 
-    public function showLogin($request) {
+    public function showLogin() {
         return view('login');
     }
 
@@ -40,7 +40,7 @@ class AuthController {
 
         $this->utenteRepository->deleteById($_SESSION['user']['id']);
         unset($_SESSION['user']);
-        echo "Il tuo account ï¿½ stato cancellato.";
+        echo "Il tuo account è stato cancellato.";
     }
 
     public function showRegister() {
@@ -51,8 +51,9 @@ class AuthController {
         $existing = $this->utenteRepository->findByEmail($request['email']);
 
         if ($existing) {
-            echo "Utente giï¿½ registrato";
-            return;
+            echo "Utente è già registrato";
+            // return;
+            exit; 
         }
 
         $user = $this->utenteRepository->create($request);
