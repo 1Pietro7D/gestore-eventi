@@ -72,10 +72,14 @@ class Router {
         }
 
         if (empty($params)) {
-            $params = [$_REQUEST]; // passa i dati POST/GET
+            // es: /utenti -> solo request
+            $params = [$_REQUEST];
+        } else {
+            // es: /utenti/update/7 -> request + id 
+            $params[] = $_REQUEST;
         }
-
         $result = $controller->$methodName(...$params);
+        
 
         if ($result === null) {
             http_response_code(404);
