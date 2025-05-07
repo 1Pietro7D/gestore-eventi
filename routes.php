@@ -10,11 +10,11 @@ return [
     [ 'method' => 'POST',   'url' => '/register',              'handler' => 'Auth/AuthController@register' ],
 
      // CRUD Utenti
-     [ 'method' => 'GET',   'url' => '/utenti',                'handler' => 'UtenteController@index',       'authorized' => true, 'role' => ['admin'] ],
-     [ 'method' => 'GET',   'url' => '/utenti/create',         'handler' => 'UtenteController@create',      'authorized' => true, 'role' => ['admin'] ],
-     [ 'method' => 'POST',  'url' => '/utenti',                'handler' => 'UtenteController@store',       'authorized' => true, 'role' => ['admin'] ],
-     [ 'method' => 'GET',   'url' => '/utenti/show/{id}',      'handler' => 'UtenteController@show',        'authorized' => true, 'role' => ['admin'] ],
-     [ 'method' => 'GET',   'url' => '/utenti/edit/{id}',      'handler' => 'UtenteController@edit',        'authorized' => true, 'role' => ['admin'] ],
-     [ 'method' => 'POST',  'url' => '/utenti/update/{id}',    'handler' => 'UtenteController@update',      'authorized' => true, 'role' => ['admin'] ],
-     [ 'method' => 'POST',  'url' => '/utenti/delete/{id}',    'handler' => 'UtenteController@destroy',     'authorized' => true, 'role' => ['admin'] ],
+    [ 'method' => 'GET',   'url' => '/utenti',                 'handler' => 'UtenteController@index',       'authorized' => true, 'role' => ['admin'] ],
+    [ 'method' => 'GET',   'url' => '/utenti/create',          'handler' => 'UtenteController@create',      'authorized' => true, 'role' => ['admin'] ],
+    [ 'method' => 'POST',  'url' => '/utenti',                 'handler' => 'UtenteController@store',       'authorized' => true, 'role' => ['admin'] ],
+    [ 'method' => 'GET',   'url' => '/utenti/show/{id}',       'handler' => 'UtenteController@show',        'authorized' => true, 'role' => ['admin'] ],
+    [ 'method' => 'GET',   'url' => '/utenti/edit/{id}',       'handler' => 'UtenteController@edit',        'authorized' => true, 'role' => ['admin'] ],
+    [ 'method' => 'POST',  'url' => '/utenti/update/{id}',     'handler' => 'UtenteController@update',      'authorized' => true, 'role' => ['admin'] ],
+    [ 'method' => 'POST',  'url' => '/utenti/delete/{id}',     'handler' => 'UtenteController@destroy',     'authorized' => true, 'role' => ['admin'] ],
 ];
