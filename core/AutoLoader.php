@@ -10,6 +10,7 @@ spl_autoload_register(function ($class) {
         __DIR__ . '/../repositories/',  // Cartella delle repository (es: UtenteRepository)
         __DIR__ . '/../core/',          // Cartella dei file core (es: Router, Autoloader stesso)
         __DIR__ . '/../database/',      // Cartella per la gestione del database
+        __DIR__ . '/../orm/',  // Cartella del orm 
     ];
 
     // Scorre ciascun percorso definito sopra
