@@ -41,7 +41,7 @@ class UtenteController {
     // POST /utenti/{id}/update
     public function update($id, $request) {
         $this->repo->updateById($id, $request);
-        header("Location: /utenti/$id");
+        header("Location: /utenti/show/$id");
         exit;
     }
 
