@@ -1,7 +1,4 @@
 <?php
-
- //require_once 'repositories/UtenteRepository.php';
-
 class AuthController {
     protected $utenteRepository;
 
@@ -18,8 +15,7 @@ class AuthController {
 
         if ($user && password_verify($request['password'], $user->password)) {
             $_SESSION['user'] = $user->toSessionArray();
-            header("Location: /");
-            exit;
+            redirect('home');
         } else {
             echo "Credenziali non valide";
         }
@@ -27,8 +23,7 @@ class AuthController {
 
     public function logout() {
         session_destroy();
-        header("Location: /login");
-        exit;
+        redirect('login');
     }
 
     public function deleteUser() {
@@ -59,7 +54,6 @@ class AuthController {
         $user = $this->utenteRepository->create($request);
         $_SESSION['user'] = $user->toSessionArray();
 
-        header("Location: /");
-        exit;
+        redirect('home');
     }
 }

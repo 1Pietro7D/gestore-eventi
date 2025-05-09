@@ -25,3 +25,42 @@ function view(string $path, array $data = []): string {
     // Restituisce tutto ciò che è stato catturato (il contenuto HTML)
     return ob_get_clean();
 }
+function redirect(string $viewName, array $params = []) {
+    // Assumendo che routes.php sia nella root
+    $routes = require __DIR__ . '/../routes.php';
+
+    $matches = [];
+
+    foreach ($routes as $route) {
+        if (isset($route['view']) && $route['view'] === $viewName) {
+            $matches[] = $route;
+        }
+    }
+
+    if (count($matches) === 1) {
+        $url = $matches[0]['url'];
+
+        // Sostituiamo tutti i parametri dinamici tipo {id}
+        foreach ($params as $key => $value) {
+            $url = preg_replace('/\{' . preg_quote($key, '/') . '\}/', $value, $url);
+        }
+
+        // Se ci sono ancora parametri non risolti, errore (es: dimenticato id)
+        if (preg_match('/\{[^\}]+\}/', $url)) {
+            http_response_code(500);
+            echo "Errore: Parametri mancanti per la route '$viewName'. URL risultante: $url";
+            exit;
+        }
+
+        header("Location: $url");
+        exit;
+    } elseif (count($matches) > 1) {
+        http_response_code(500);
+        echo "Errore: Trovate più route con view '$viewName'.";
+        exit;
+    } else {
+        http_response_code(500);
+        echo "Errore: Nessuna route trovata con view '$viewName'.";
+        exit;
+    }
+}

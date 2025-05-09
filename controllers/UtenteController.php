@@ -1,6 +1,4 @@
 <?php
-// require_once 'repositories/UtenteRepository.php';
-
 class UtenteController {
     protected UtenteRepository $utenteRepository;
 
@@ -27,9 +25,8 @@ class UtenteController {
 
     // POST /utenti
     public function store($request) {
-        $this->utenteRepository->create($request);
-        header("Location: /utenti");
-        exit;
+        $newUser = $this->utenteRepository->create($request);
+        redirect('utenti.show', ['id' => $newUser->id]);
     }
 
     // GET /utenti/{id}/edit
@@ -40,15 +37,15 @@ class UtenteController {
 
     // POST /utenti/{id}/update
     public function update($id, $request) {
-        $this->utenteRepository->updateById($id, $request);
-        header("Location: /utenti/show/$id");
-        exit;
+        
+    $this->utenteRepository->updateById($id, $request);
+        redirect('utenti.show', ['id' => $id]);
+       
     }
 
     // POST /utenti/{id}/delete
     public function destroy($id) {
         $this->utenteRepository->deleteById($id);
-        header("Location: /utenti");
-        exit;
+        redirect("utenti.index");
     }
 }
