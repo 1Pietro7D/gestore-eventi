@@ -1,4 +1,4 @@
-<?php // php database/migrations/migrate_users_table.php
+<?php // php database/migrations/migrate_utenti_table.php
 require_once __DIR__ . '/../Database.php';
 
 try {

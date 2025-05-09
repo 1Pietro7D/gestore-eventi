@@ -1,6 +1,4 @@
 <?php
-require_once 'Model.php';
-
 class Utente extends Model {
     public $id;
     public $nome;
