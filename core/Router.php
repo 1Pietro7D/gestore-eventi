@@ -32,7 +32,11 @@ class Router {
 
         // Nessuna rotta trovata: mostra la pagina 404
         http_response_code(404);
-        require 'views/404.php';
+        if (php_sapi_name() !== 'cli') {
+            require 'views/404.php';
+        } else {
+            echo "404 - Not Found";
+        }
     }
 
     // Esegue il controller e il metodo associato alla rotta trovata
@@ -103,9 +107,15 @@ class Router {
         // Se il metodo non restituisce nulla, mostra la pagina 404 (fallback)
         if ($result === null) {
             http_response_code(404);
-            require 'views/404.php';
-            exit;
+            if (php_sapi_name() !== 'cli') {
+                require 'views/404.php';
+                exit;
+            } else {
+                echo "404 - Not Found";
+            }
+            
         }
+        
 
         // Mostra il risultato della view (se esiste)
         echo $result;
