@@ -16,7 +16,7 @@
 <p><strong>Video:</strong><br>
 <?php if ($evento->video_path): ?>
     <video width="320" height="240" controls>
-        <source src="<?= htmlspecialchars($evento->video_path) ?>">
+        <source src="/public<?= htmlspecialchars($evento->video_path) ?>">
         Il tuo browser non supporta il tag video.
     </video>
 <?php else: ?>

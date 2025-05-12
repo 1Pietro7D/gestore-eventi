@@ -37,10 +37,10 @@
                         <?php endif; ?>
                     </td>
                     <td>
-                        <a href="/eventi/show/<?= $evento->id ?>">??? Visualizza</a> |
-                        <a href="/eventi/edit/<?= $evento->id ?>">?? Modifica</a> |
+                        <a href="/eventi/show/<?= $evento->id ?>">Visualizza</a> |
+                        <a href="/eventi/edit/<?= $evento->id ?>">Modifica</a> |
                         <form action="/eventi/delete/<?= $evento->id ?>" method="POST" style="display:inline;" onsubmit="return confirm('Sei sicuro di voler eliminare questo evento?');">
-                            <button type="submit">??? Elimina</button>
+                            <button type="submit">Elimina</button>
                         </form>
                     </td>
                 </tr>

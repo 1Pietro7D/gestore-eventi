@@ -8,11 +8,7 @@ class EventoController {
 
     // GET /eventi
     public function index() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']['id'])) {
+    if (!isset($_SESSION['user']['id'])) {
             echo "Devi essere loggato per visualizzare i tuoi eventi.";
             return;
         }
@@ -25,10 +21,6 @@ class EventoController {
 
     // GET /eventi/{id}
     public function show($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         $evento = $this->eventoRepository->findById($id);
 
         if (!$evento) {
@@ -51,10 +43,7 @@ class EventoController {
 
     // POST /eventi
     public function store($request) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        
         try {
             if (!isset($_SESSION['user']['id'])) {
                 throw new Exception("Devi essere loggato per creare un evento.");
@@ -108,10 +97,6 @@ class EventoController {
 
     // GET /eventi/{id}/edit
     public function edit($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         $evento = $this->eventoRepository->findById($id);
 
         if (!$evento) {
@@ -129,10 +114,6 @@ class EventoController {
 
     // POST /eventi/{id}/update
     public function update($id, $request) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         $evento = $this->eventoRepository->findById($id);
 
         if (!$evento) {
@@ -151,10 +132,6 @@ class EventoController {
 
     // POST /eventi/{id}/delete
     public function destroy($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         $evento = $this->eventoRepository->findById($id);
 
         if (!$evento) {
@@ -173,10 +150,6 @@ class EventoController {
 
     // POST /eventi/{id}/update-media
     public function updateMedia($id, $request) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         $evento = $this->eventoRepository->findById($id);
 
         if (!$evento) {
