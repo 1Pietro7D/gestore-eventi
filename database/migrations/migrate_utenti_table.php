@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS utenti (
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    ruolo ENUM('user', 'admin') NOT NULL DEFAULT 'user'
+    ruolo ENUM('user', 'admin', 'superadmin') NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 SQL;
 
