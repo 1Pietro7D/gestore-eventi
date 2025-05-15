@@ -2,3 +2,4 @@ vendor\bin\phpunit --version
 php vendor\phpunit\phpunit\phpunit tests
 php vendor\phpunit\phpunit\phpunit tests\ExampleTest.php
 php vendor\phpunit\phpunit\phpunit --filter testBasicMath tests\ExampleTest.php
+composer require symfony/cache
