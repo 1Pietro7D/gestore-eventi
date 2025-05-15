@@ -75,12 +75,10 @@ class Router {
 
         $params = empty($params) ? [$_REQUEST] : array_merge($params, [$_REQUEST]);
 
-        // Usa la cache solo per la homepage
-        if ($method === 'GET' && $uri === '/') {
-            // require_once __DIR__ . '/CacheMiddleware.php';
+        if($method === 'GET' && isset($route['cache'])){
             $cache = new CacheMiddleware();
-            echo $cache->handle('home_cache', 60, function () use ($controller, $methodName, $params) {
-                echo $controller->$methodName(...$params);
+            echo $cache->handle($route['cache'][0],$route['cache'][1], function () use ($controller, $methodName, $params) {
+                echo $controller->$methodName(...$params);           
             });
             return;
         }       
