@@ -83,8 +83,7 @@ class Router {
                 echo $controller->$methodName(...$params);
             });
             return;
-        }
-
+        }       
         $result = $controller->$methodName(...$params);
 
         if ($result === null) {

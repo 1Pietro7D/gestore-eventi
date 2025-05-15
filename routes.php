@@ -9,7 +9,7 @@
  *      'view' => 'utenti.index' ],
  */
 return [
-    [ 'method' => 'GET',    'url' => '/',                      'handler' => 'HomeController@index', 'view'=> 'home'],
+    [ 'method' => 'GET',    'url' => '/',                      'handler' => 'HomeController@index', 'view'=> 'home' , 'cache' => ['home_cache', 60]],
    
     [ 'method' => 'GET',    'url' => '/login',                 'handler' => 'Auth/AuthController@showLogin' , 'view'=> 'login'],
     [ 'method' => 'POST',   'url' => '/login',                 'handler' => 'Auth/AuthController@login' ],
@@ -28,12 +28,11 @@ return [
     [ 'method' => 'POST',  'url' => '/utenti/delete/{id}',     'handler' => 'UtenteController@destroy',     'authorized' => true, 'role' => ['superadmin'] ],
 
     // CRUD Eventi
-    [ 'method' => 'GET',   'url' => '/eventi',                 'handler' => 'EventoController@index',       'authorized' => true, 'role' => ['admin'], 'view' => 'eventi.index'],
-    [ 'method' => 'GET',   'url' => '/eventi/create',          'handler' => 'EventoController@create',      'authorized' => true, 'role' => ['admin'], 'view' => 'eventi.create'],
-    [ 'method' => 'POST',  'url' => '/eventi',                 'handler' => 'EventoController@store',       'authorized' => true, 'role' => ['admin']],
-    [ 'method' => 'GET',   'url' => '/eventi/show/{id}',       'handler' => 'EventoController@show',        'authorized' => true, 'role' => ['admin'], 'view' => 'eventi.show'],
-    [ 'method' => 'GET',   'url' => '/eventi/edit/{id}',       'handler' => 'EventoController@edit',        'authorized' => true, 'role' => ['admin'], 'view' => 'eventi.edit'],
-    [ 'method' => 'POST',  'url' => '/eventi/update/{id}',     'handler' => 'EventoController@update',      'authorized' => true, 'role' => ['admin']],
-    [ 'method' => 'POST',  'url' => '/eventi/delete/{id}',     'handler' => 'EventoController@destroy',     'authorized' => true, 'role' => ['admin']],
-    [ 'method' => 'POST',  'url' => '/eventi/update-media/{id}','handler' => 'EventoController@updateMedia', 'authorized' => true, 'role' => ['admin']]
+    [ 'method' => 'GET',   'url' => '/eventi',                 'handler' => 'EventoController@index',       'authorized' => true, 'role' => ['superadmin', 'admin'], 'view' => 'eventi.index',  'cache' => ['eventi_cache', 60]],
+    [ 'method' => 'GET',   'url' => '/eventi/create',          'handler' => 'EventoController@create',      'authorized' => true, 'role' => ['superadmin', 'admin'], 'view' => 'eventi.create'],
+    [ 'method' => 'POST',  'url' => '/eventi',                 'handler' => 'EventoController@store',       'authorized' => true, 'role' => ['superadmin', 'admin']],
+    [ 'method' => 'GET',   'url' => '/eventi/show/{id}',       'handler' => 'EventoController@show',        'authorized' => true, 'role' => ['superadmin', 'admin'], 'view' => 'eventi.show'],
+    [ 'method' => 'GET',   'url' => '/eventi/edit/{id}',       'handler' => 'EventoController@edit',        'authorized' => true, 'role' => ['superadmin', 'admin'], 'view' => 'eventi.edit'],
+    [ 'method' => 'POST',  'url' => '/eventi/update/{id}',     'handler' => 'EventoController@update',      'authorized' => true, 'role' => ['superadmin', 'admin']],
+    [ 'method' => 'POST',  'url' => '/eventi/delete/{id}',     'handler' => 'EventoController@destroy',     'authorized' => true, 'role' => ['superadmin', 'admin']],
 ];

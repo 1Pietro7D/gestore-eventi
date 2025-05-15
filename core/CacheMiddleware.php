@@ -9,13 +9,11 @@ class CacheMiddleware
 {
     private $cache;
 
-    public function __construct()
-    {
+    public function __construct(){
         $this->cache = new FilesystemAdapter();
     }
 
-    public function handle(string $key, int $ttl, callable $callback): string
-    {
+    public function handle(string $key, int $ttl, callable $callback): string {
         $fromCache = true;
 
         $content = $this->cache->get($key, function (ItemInterface $item) use ($ttl, $callback, &$fromCache) {
