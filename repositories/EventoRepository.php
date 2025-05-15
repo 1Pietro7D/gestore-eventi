@@ -24,10 +24,6 @@ class EventoRepository extends BaseRepository {
             throw new Exception("Utente non trovato.");
         }
 
-        if ($utente->ruolo !== 'admin') {
-            throw new Exception("Solo gli utenti admin possono creare eventi.");
-        }
-
         /** @var Evento $evento */
         $evento = parent::create($data);
         return $evento;
@@ -43,25 +39,5 @@ class EventoRepository extends BaseRepository {
         $stmt->execute([':utente_id' => $utenteId]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return array_map(fn($row) => new $this->modelClass($row), $rows);
-    }
-
-    /**
-     * Aggiorna l'immagine e/o il video di un evento specifico.
-     * @param int $eventoId
-     * @param string|null $imgPath
-     * @param string|null $videoPath
-     */
-    public function updateMedia(int $eventoId, ?string $imgPath, ?string $videoPath): void {
-        $data = [];
-        if ($imgPath !== null) {
-            $data['img_path'] = $imgPath;
-        }
-        if ($videoPath !== null) {
-            $data['video_path'] = $videoPath;
-        }
-
-        if (!empty($data)) {
-            $this->updateById($eventoId, $data);
-        }
     }
 }

@@ -17,7 +17,8 @@
 </head>
 <body>
     <?php require_once __DIR__.  ('/Components/header.php'); ?>
-    <h1>Eventi</h1>
+    <h1>Home</h1>
+    <h2>Eventi</h2>
     <div class="container">
         <?php foreach ($eventi as $evento): ?>
             <div class="evento-card">

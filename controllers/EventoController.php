@@ -1,5 +1,5 @@
 <?php
-class EventoController {
+class EventoController extends BaseController{
     protected EventoRepository $eventoRepository;
 
     public function __construct() {
@@ -8,11 +8,6 @@ class EventoController {
 
     // GET /eventi
     public function index() {
-    if (!isset($_SESSION['user']['id'])) {
-            echo "Devi essere loggato per visualizzare i tuoi eventi.";
-            return;
-        }
-
         $utenteId = $_SESSION['user']['id'];
         $eventi = $this->eventoRepository->findByUtenteId($utenteId);
 
@@ -44,55 +39,22 @@ class EventoController {
     // POST /eventi
     public function store($request) {
         
-        try {
-            if (!isset($_SESSION['user']['id'])) {
-                throw new Exception("Devi essere loggato per creare un evento.");
-            }
-
-            $imgPath = null;
-            $videoPath = null;
-
-            // Directory di destinazione upload
-            $uploadDir = __DIR__ . '/../public/upload';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-
-            // Gestione immagine
-            if (isset($_FILES['img_file']) && $_FILES['img_file']['error'] === UPLOAD_ERR_OK) {
-                $imgTmpPath = $_FILES['img_file']['tmp_name'];
-                $imgName = basename($_FILES['img_file']['name']);
-                $uniqueImgName = uniqid() . '_' . $imgName;
-                $targetImgPath = '/upload/' . $uniqueImgName;
-                move_uploaded_file($imgTmpPath, $uploadDir . '/' . $uniqueImgName);
-                $imgPath = $targetImgPath;
-            }
-
-            // Gestione video
-            if (isset($_FILES['video_file']) && $_FILES['video_file']['error'] === UPLOAD_ERR_OK) {
-                $videoTmpPath = $_FILES['video_file']['tmp_name'];
-                $videoName = basename($_FILES['video_file']['name']);
-                $uniqueVideoName = uniqid() . '_' . $videoName;
-                $targetVideoPath = '/upload/' . $uniqueVideoName;
-                move_uploaded_file($videoTmpPath, $uploadDir . '/' . $uniqueVideoName);
-                $videoPath = $targetVideoPath;
-            }
-
+       
+            $img_path = $this->uploadMedia($_FILES['img_file'], 'upload');        
+            $video_path = $this->uploadMedia($_FILES['video_file'], 'upload');
+           
             $data = [
                 'titolo' => $request['titolo'],
                 'descrizione' => $request['descrizione'] ?? null,
                 'data_evento' => $request['data_evento'],
-                'img_path' => $imgPath,
-                'video_path' => $videoPath,
+                'img_path' => $img_path,
+                'video_path' => $video_path,
                 'utente_id' => $_SESSION['user']['id']
             ];
 
             $nuovoEvento = $this->eventoRepository->create($data);
             redirect('eventi.show', ['id' => $nuovoEvento->id]);
 
-        } catch (Exception $e) {
-            echo "Errore durante la creazione: " . $e->getMessage();
-        }
     }
 
     // GET /eventi/{id}/edit
@@ -114,30 +76,40 @@ class EventoController {
 
     // POST /eventi/{id}/update
     public function update($id, $request) {
+        $titolo = $request['titolo'];
+        $descrizione = $request['descrizione'];
+        $data_evento = $request['data_evento'];
+
+
+        $data = [
+            'titolo' => $titolo,
+            'descrizione' => $descrizione,
+            'data_evento' => $data_evento,
+        ];
         $evento = $this->eventoRepository->findById($id);
 
-        if (!$evento) {
-            echo "Evento non trovato.";
-            return;
-        }
+        $img_path = $this->uploadMedia($_FILES['img_file'], 'upload', $evento->img_path);
+        $data['img_path'] = $img_path;
+        
+        $video_path = $this->uploadMedia($_FILES['video_file'], 'upload', $evento->video_path);
+        $data['video_path'] = $video_path;
+      
+        $this->eventoRepository->updateById($id, $data);
 
-        if ($evento->utente_id != $_SESSION['user']['id']) {
-            echo "Non sei autorizzato a modificare questo evento.";
-            return;
-        }
-
-        $this->eventoRepository->updateById($id, $request);
-        redirect('eventi.show', ['id' => $id]);
+        header('Location: /eventi/show/' . $id);
+        exit;
     }
+
 
     // POST /eventi/{id}/delete
     public function destroy($id) {
         $evento = $this->eventoRepository->findById($id);
-
         if (!$evento) {
             echo "Evento non trovato.";
             return;
         }
+        $this->deleteMedia($evento->img_path);
+        $this->deleteMedia($evento->video_path);  
 
         if ($evento->utente_id != $_SESSION['user']['id']) {
             echo "Non sei autorizzato a eliminare questo evento.";
@@ -148,50 +120,5 @@ class EventoController {
         redirect('eventi.index');
     }
 
-    // POST /eventi/{id}/update-media
-    public function updateMedia($id, $request) {
-        $evento = $this->eventoRepository->findById($id);
-
-        if (!$evento) {
-            echo "Evento non trovato.";
-            return;
-        }
-
-        if ($evento->utente_id != $_SESSION['user']['id']) {
-            echo "Non sei autorizzato a modificare i media di questo evento.";
-            return;
-        }
-
-        $imgPath = null;
-        $videoPath = null;
-
-        // Directory di destinazione upload
-        $uploadDir = __DIR__ . '/../public/upload';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        // Gestione nuova immagine
-        if (isset($_FILES['img_file']) && $_FILES['img_file']['error'] === UPLOAD_ERR_OK) {
-            $imgTmpPath = $_FILES['img_file']['tmp_name'];
-            $imgName = basename($_FILES['img_file']['name']);
-            $uniqueImgName = uniqid() . '_' . $imgName;
-            $targetImgPath = '/upload/' . $uniqueImgName;
-            move_uploaded_file($imgTmpPath, $uploadDir . '/' . $uniqueImgName);
-            $imgPath = $targetImgPath;
-        }
-
-        // Gestione nuovo video
-        if (isset($_FILES['video_file']) && $_FILES['video_file']['error'] === UPLOAD_ERR_OK) {
-            $videoTmpPath = $_FILES['video_file']['tmp_name'];
-            $videoName = basename($_FILES['video_file']['name']);
-            $uniqueVideoName = uniqid() . '_' . $videoName;
-            $targetVideoPath = '/upload/' . $uniqueVideoName;
-            move_uploaded_file($videoTmpPath, $uploadDir . '/' . $uniqueVideoName);
-            $videoPath = $targetVideoPath;
-        }
-
-        $this->eventoRepository->updateMedia($id, $imgPath, $videoPath);
-        redirect('eventi.show', ['id' => $id]);
-    }
+    
 }
