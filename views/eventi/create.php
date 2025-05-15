@@ -1,6 +1,6 @@
 <h1>Crea Nuovo Evento</h1>
 
-<form action="/eventi" method="POST" enctype="multipart/form-data">
+<form action="/eventi/store" method="POST" enctype="multipart/form-data">
     <div>
         <label for="titolo">Titolo:</label><br>
         <input type="text" id="titolo" name="titolo" required>

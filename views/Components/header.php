@@ -1,4 +1,4 @@
-<nav >
+<nav cache="false">
     <ul class="navbar">
         <?php if (isset($_SESSION['user'])): ?>
             <li><a href="/logout">Logout</a></li>     
