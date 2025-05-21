@@ -9,25 +9,24 @@ class EventoController extends BaseController{
     // GET /eventi
     public function index() {
         $utenteId = $_SESSION['user']['id'];
-        $eventi = $this->eventoRepository->findByUtenteId($utenteId);
-
-        return view('eventi.index', compact('eventi'));
+        return Cache::view('eventi_utente_' . $utenteId, 300, function () use ($utenteId) {
+            $eventi = $this->eventoRepository->findByUtenteId($utenteId);
+            return view('eventi.index', compact('eventi'));          
+        });
+        
     }
 
     // GET /eventi/{id}
-    public function show($id) {
-        $evento = $this->eventoRepository->findById($id);
-
+    public function show($id) { 
+        $evento = Cache::remember('eventi_show_' . $id .'_' . $_SESSION['user']['id'], 10, function () use ($id) {      
+                return $this->eventoRepository->findById($id);
+        });
         if (!$evento) {
-            echo "Evento non trovato.";
-            return;
+                return "Evento non trovato."; 
         }
-
         if ($evento->utente_id != $_SESSION['user']['id']) {
-            echo "Non sei autorizzato a vedere questo evento.";
-            return;
+            return "Non sei autorizzato a vedere questo evento.";   
         }
-
         return view('eventi.show', compact('evento'));
     }
 
@@ -53,6 +52,8 @@ class EventoController extends BaseController{
             ];
 
             $nuovoEvento = $this->eventoRepository->create($data);
+            Cache::clear('eventi_utente_' . $_SESSION['user']['id']);
+            Cache::clear('eventi_home');
             redirect('eventi.show', ['id' => $nuovoEvento->id]);
 
     }
@@ -70,7 +71,7 @@ class EventoController extends BaseController{
             echo "Non sei autorizzato a modificare questo evento.";
             return;
         }
-
+        
         return view('eventi.edit', compact('evento'));
     }
 
@@ -95,9 +96,10 @@ class EventoController extends BaseController{
         $data['video_path'] = $video_path;
       
         $this->eventoRepository->updateById($id, $data);
-
-        header('Location: /eventi/show/' . $id);
-        exit;
+        Cache::clear('eventi_show_' . $id .'_' . $_SESSION['user']['id']);
+        Cache::clear('eventi_utente_' . $evento->utente_id);
+        Cache::clear('eventi_home');
+        redirect('eventi.show', ['id' => $id]);
     }
 
 
@@ -117,6 +119,10 @@ class EventoController extends BaseController{
         }
 
         $this->eventoRepository->deleteById($id);
+      
+        Cache::clear('eventi_show_' . $id .'_' . $_SESSION['user']['id']);
+        Cache::clear('eventi_utente_' . $evento->utente_id);
+        Cache::clear('eventi_home');
         redirect('eventi.index');
     }
 
