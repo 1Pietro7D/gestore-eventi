@@ -1,3 +1,4 @@
+ <?php require_once __DIR__.  ('/../Components/header.php'); ?>
 <h1>Lista Eventi</h1>
 
 <a href="/eventi/create">? Crea Nuovo Evento</a>

@@ -1,3 +1,4 @@
+ <?php require_once __DIR__.  ('/../Components/header.php'); ?>
 <h2>Utenti</h2>
 <ul>
 <?php foreach ($utenti as $utente): ?>

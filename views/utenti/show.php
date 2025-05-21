@@ -5,6 +5,7 @@
     <title>Dettaglio utente</title>
 </head>
 <body>
+     <?php require_once __DIR__.  ('/../Components/header.php'); ?>
     <h1>Dettaglio utente</h1>
 
     <?php if ($utente): ?>

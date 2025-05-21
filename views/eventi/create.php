@@ -1,3 +1,4 @@
+ <?php require_once __DIR__.  ('/../Components/header.php'); ?>
 <h1>Crea Nuovo Evento</h1>
 
 <form action="/eventi/store" method="POST" enctype="multipart/form-data">

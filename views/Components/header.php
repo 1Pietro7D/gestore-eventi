@@ -1,4 +1,4 @@
-<nav cache="false">
+<nav>
     <ul class="navbar">
         <?php if (isset($_SESSION['user'])): ?>
             <li><a href="/logout">Logout</a></li>     
@@ -17,6 +17,7 @@
             <a href="/utenti">utenti</a>
         </li>
     </ul>
+    <!-- <strong><?= htmlspecialchars($_SESSION['user']['ruolo']) ?></strong> -->
 </nav>
 
 <style>

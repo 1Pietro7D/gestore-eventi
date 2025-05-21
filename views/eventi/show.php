@@ -1,3 +1,4 @@
+ <?php require_once __DIR__.  ('/../Components/header.php'); ?>
 <h1>Dettagli Evento</h1>
 
 <p><strong>ID:</strong> <?= htmlspecialchars($evento->id) ?></p>

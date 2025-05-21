@@ -1,4 +1,5 @@
-<h1>Modifica Evento</h1>
+
+ <?php require_once __DIR__.  ('/../Components/header.php'); ?><h1>Modifica Evento</h1>
 
 <form action="/eventi/update/<?= $evento->id ?>" method="POST" enctype="multipart/form-data">
     <div>

@@ -5,6 +5,7 @@
     <title>Crea nuovo utente</title>
 </head>
 <body>
+     <?php require_once __DIR__.  ('/../Components/header.php'); ?>
     <h1>Crea nuovo utente</h1>
 
     <form action="/utenti/store" method="POST">
