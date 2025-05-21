@@ -75,13 +75,13 @@ class Router {
 
         $params = empty($params) ? [$_REQUEST] : array_merge($params, [$_REQUEST]);
 
-        if($method === 'GET' && isset($route['cache'])){
-            $cache = new CacheMiddleware();
-            echo $cache->handle($route['cache'][0],$route['cache'][1], function () use ($controller, $methodName, $params) {
-                echo $controller->$methodName(...$params);           
-            });
-            return;
-        }       
+        // if($method === 'GET' && isset($route['cache'])){
+        //     $cache = new CacheMiddleware();
+        //     echo $cache->handle($route['cache'][0],$route['cache'][1], function () use ($controller, $methodName, $params) {
+        //         echo $controller->$methodName(...$params);           
+        //     });
+        //     return;
+        // }       
         $result = $controller->$methodName(...$params);
 
         if ($result === null) {
