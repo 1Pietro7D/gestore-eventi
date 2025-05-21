@@ -7,8 +7,8 @@ class DatabaseSeeder {
         $db = Database::connect();
 
         $stmt = $db->prepare("
-            INSERT INTO eventi (titolo, descrizione, data_evento, img_path, video_path, utente_id)
-            VALUES (:titolo, :descrizione, :data_evento, :img_path, :video_path, :utente_id)
+            INSERT INTO eventi (titolo, descrizione, data_evento, img_path, video_path, utente_id, categoria_id)
+            VALUES (:titolo, :descrizione, :data_evento, :img_path, :video_path, :utente_id, :categoria_id)
         ");
 
         $eventi = [
@@ -18,7 +18,8 @@ class DatabaseSeeder {
                 'data_evento' => '2025-06-10',
                 'img_path' => '',
                 'video_path' => '',
-                'utente_id' => 1
+                'utente_id' => 1,
+                'categoria_id' => 1  // Workshop
             ],
             [
                 'titolo' => 'Corso di Cucina Vegana',
@@ -26,7 +27,8 @@ class DatabaseSeeder {
                 'data_evento' => '2025-07-01',
                 'img_path' => '',
                 'video_path' => '',
-                'utente_id' => 1
+                'utente_id' => 1,
+                'categoria_id' => 2  // Corsi di cucina
             ],
             [
                 'titolo' => 'Seminario di Crescita Personale',
@@ -34,7 +36,8 @@ class DatabaseSeeder {
                 'data_evento' => '2025-07-15',
                 'img_path' => '',
                 'video_path' => '',
-                'utente_id' => 1
+                'utente_id' => 1,
+                'categoria_id' => 3  // Sviluppo personale
             ],
             [
                 'titolo' => 'Corso di Programmazione PHP',
@@ -42,7 +45,8 @@ class DatabaseSeeder {
                 'data_evento' => '2025-08-20',
                 'img_path' => '',
                 'video_path' => '',
-                'utente_id' => 1
+                'utente_id' => 1,
+                'categoria_id' => 4  // Informatica
             ]
         ];
 

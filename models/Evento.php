@@ -7,17 +7,19 @@ class Evento {
     public ?string $img_path;
     public ?string $video_path;
     public int $utente_id;
+    public ?int $categoria_id;
     public string $created_at;
     public string $updated_at;
 
     public function __construct(array $data) {
-        $this->id = $data['id'] ?? 0;
+        $this->id = (int) ($data['id'] ?? 0);
         $this->titolo = $data['titolo'] ?? '';
         $this->descrizione = $data['descrizione'] ?? null;
         $this->data_evento = $data['data_evento'] ?? '';
         $this->img_path = $data['img_path'] ?? null;
         $this->video_path = $data['video_path'] ?? null;
-        $this->utente_id = $data['utente_id'] ?? 0;
+        $this->utente_id = (int) ($data['utente_id'] ?? 0);
+        $this->categoria_id = isset($data['categoria_id']) ? (int) $data['categoria_id'] : null;
         $this->created_at = $data['created_at'] ?? '';
         $this->updated_at = $data['updated_at'] ?? '';
     }

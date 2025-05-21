@@ -40,4 +40,18 @@ class EventoRepository extends BaseRepository {
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return array_map(fn($row) => new $this->modelClass($row), $rows);
     }
+
+    
+        /**
+     * Restituisce tutti gli eventi associati a una determinata categoria.
+     * @param int $categoriaId
+     * @return array
+     */
+    public function findByCategoria(int $categoriaId): array {
+        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE categoria_id = :categoria_id");
+        $stmt->execute([':categoria_id' => $categoriaId]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return array_map(fn($row) => new $this->modelClass($row), $rows);
+    }
+
 }

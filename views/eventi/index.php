@@ -14,7 +14,9 @@
                 <th>Data Evento</th>
                 <th>Immagine</th>
                 <th>Video</th>
+                <th>Categoria</th>
                 <th>Azioni</th>
+               
             </tr>
         </thead>
         <tbody>
@@ -36,6 +38,9 @@
                         <?php else: ?>
                             Nessun video
                         <?php endif; ?>
+                    </td>
+                    <td>
+                        <?= htmlspecialchars($evento->categoria_id) ?>
                     </td>
                     <td>
                         <a href="/eventi/show/<?= $evento->id ?>">Visualizza</a> |
