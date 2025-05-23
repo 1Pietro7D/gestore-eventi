@@ -11,6 +11,9 @@
             </li>
         <?php endif; ?> 
         <li>
+            <a href="/">home</a>
+        </li>
+        <li>
             <a href="/eventi">eventi</a>
         </li>
         <li>
