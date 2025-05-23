@@ -19,6 +19,9 @@
         <li>
             <a href="/utenti">utenti</a>
         </li>
+        <li>
+            <a href="/categorie">categorie</a>
+        </li>
     </ul>
     <!-- <strong><?= htmlspecialchars($_SESSION['user']['ruolo']) ?></strong> -->
 </nav>
