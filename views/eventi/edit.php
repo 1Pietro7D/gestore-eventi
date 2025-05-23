@@ -16,6 +16,16 @@
         <label for="data_evento">Data Evento:</label><br>
         <input type="date" id="data_evento" name="data_evento" value="<?= htmlspecialchars($evento->data_evento) ?>" required>
     </div>
+    <div>
+    <label for="categoria_id">Categoria:</label><br>
+        <select name="categoria_id" id="categoria_id" required>
+            <?php foreach ($categorie as $categoria): ?>
+                <option value="<?= $categoria->id ?>" <?= $evento->categoria_id === $categoria->id ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($categoria->nome) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
 
     <h3>Aggiorna Immagine o Video</h3>
 

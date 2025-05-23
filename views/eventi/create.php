@@ -16,6 +16,15 @@
         <label for="data_evento">Data Evento:</label><br>
         <input type="date" id="data_evento" name="data_evento" required>
     </div>
+    <div>
+    <label for="categoria_id">Categoria:</label><br>
+    <select name="categoria_id" id="categoria_id" required>
+        <option value="">-- Seleziona una categoria --</option>
+        <?php foreach ($categorie as $categoria): ?>
+            <option value="<?= $categoria->id ?>"><?= htmlspecialchars($categoria->nome) ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
     <div>
         <label for="img_file">Carica Immagine:</label><br>

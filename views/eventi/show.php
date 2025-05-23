@@ -5,7 +5,7 @@
 <p><strong>Titolo:</strong> <?= htmlspecialchars($evento->titolo) ?></p>
 <p><strong>Descrizione:</strong><br><?= nl2br(htmlspecialchars($evento->descrizione)) ?></p>
 <p><strong>Data Evento:</strong> <?= htmlspecialchars($evento->data_evento) ?></p>
-
+<p><strong>Categoria:</strong> <?= htmlspecialchars($evento->categoria->nome) ?></p>
 <p><strong>Immagine:</strong><br>
 <?php if ($evento->img_path): ?>
     <img src="/public<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="300">

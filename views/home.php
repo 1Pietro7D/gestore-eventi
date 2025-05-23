@@ -30,6 +30,10 @@
                     <p><?= htmlspecialchars($evento->data_evento) ?></p>          
                 </div>
                 <div>
+                    <p>Categoria</p>
+                    <p><?= htmlspecialchars($evento->categoria->nome) ?></p>          
+                </div>
+                <div>
                     <?php if ($evento->img_path): ?>
                         <img src="/public<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="100">
                     <?php else: ?>

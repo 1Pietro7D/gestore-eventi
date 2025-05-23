@@ -40,7 +40,7 @@
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?= htmlspecialchars($evento->categoria_id) ?>
+                        <?= htmlspecialchars($evento->categoria->nome) ?>
                     </td>
                     <td>
                         <a href="/eventi/show/<?= $evento->id ?>">Visualizza</a> |
