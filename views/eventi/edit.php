@@ -1,6 +1,15 @@
 
  <?php require_once __DIR__.  ('/../Components/header.php'); ?><h1>Modifica Evento</h1>
-
+<?php if (!empty($_SESSION['errors'])): ?>
+    <div style="color: red;">
+        <ul>
+            <?php foreach ($_SESSION['errors'] as $error): ?>
+                <li><?= htmlspecialchars($error) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php unset($_SESSION['errors']); ?>
+<?php endif; ?>
 <form action="/eventi/update/<?= $evento->id ?>" method="POST" enctype="multipart/form-data">
     <div>
         <label for="titolo">Titolo:</label><br>

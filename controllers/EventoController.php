@@ -39,25 +39,30 @@ class EventoController extends BaseController{
 
     // POST /eventi
     public function store($request) {
-        
-       
-            $img_path = $this->uploadMedia($_FILES['img_file'], 'upload');        
-            $video_path = $this->uploadMedia($_FILES['video_file'], 'upload');
-           
-            $data = [
-                'titolo' => $request['titolo'],
-                'descrizione' => $request['descrizione'] ?? null,
-                'data_evento' => $request['data_evento'],
-                'categoria_id' => (int) $request['categoria_id'],
-                'img_path' => $img_path,
-                'video_path' => $video_path,
-                'utente_id' => $_SESSION['user']['id']
-            ];
+        $errors = $this->validaEvento($request);
 
-            $nuovoEvento = $this->eventoRepository->create($data);
-            Cache::clear('eventi_utente_' . $_SESSION['user']['id']);
-            Cache::clear('eventi_home');
-            redirect('eventi.show', ['id' => $nuovoEvento->id]);
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            redirect('eventi.create');
+            return;
+        }
+       
+        $img_path = $this->uploadMedia($_FILES['img_file'], 'upload');        
+        $video_path = $this->uploadMedia($_FILES['video_file'], 'upload');
+        
+        $data = [
+            'titolo' => $request['titolo'],
+            'descrizione' => $request['descrizione'] ?? null,
+            'data_evento' => $request['data_evento'],
+            'categoria_id' => (int) $request['categoria_id'],
+            'img_path' => $img_path,
+            'video_path' => $video_path,
+            'utente_id' => $_SESSION['user']['id']
+        ];
+        $nuovoEvento = $this->eventoRepository->create($data);
+        Cache::clear('eventi_utente_' . $_SESSION['user']['id']);
+        Cache::clear('eventi_home');
+        redirect('eventi.show', ['id' => $nuovoEvento->id]);
 
     }
 
@@ -86,13 +91,21 @@ class EventoController extends BaseController{
         $titolo = $request['titolo'];
         $descrizione = $request['descrizione'];
         $data_evento = $request['data_evento'];
+        $categoriaId = (int) $request['categoria_id'];
+        $errors = $this->validaEvento($request);
 
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            redirect('eventi.edit',['id' => $id]);
+            return;
+        }     
+        
 
         $data = [
             'titolo' => $titolo,
             'descrizione' => $descrizione,
             'data_evento' => $data_evento,
-            'categoria_id' => (int) $request['categoria_id'],
+            'categoria_id' => $categoriaId,
         ];
         $evento = $this->eventoRepository->findById($id);
 
@@ -133,5 +146,32 @@ class EventoController extends BaseController{
         redirect('eventi.index');
     }
 
-    
+    private function validaEvento(array $request): array {
+    $errors = [];
+
+    if (empty($request['titolo']) || strlen(trim($request['titolo'])) < 3) {
+        $errors[] = "Il titolo è obbligatorio e deve contenere almeno 3 caratteri.";
+    }
+
+    if (!empty($request['descrizione']) && strlen($request['descrizione']) > 1000) {
+        $errors[] = "La descrizione non può superare i 1000 caratteri.";
+    }
+
+    if (empty($request['data_evento']) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $request['data_evento'])) {
+        $errors[] = "Data evento non valida o mancante.";
+    }
+
+    $categoriaId = $request['categoria_id'] ?? null;
+    if (empty($categoriaId) || !is_numeric($categoriaId)) {
+        $errors[] = "Categoria obbligatoria.";
+    } else {
+        $categoriaRepo = new CategoriaRepository();
+        if (!$categoriaRepo->findById((int) $categoriaId)) {
+            $errors[] = "Categoria selezionata non valida.";
+        }
+    }
+
+    return $errors;
+}
+
 }
