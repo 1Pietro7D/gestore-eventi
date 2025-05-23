@@ -1,7 +1,7 @@
 <?php
 class EventoController extends BaseController{
     protected EventoRepository $eventoRepository;
-
+    
     public function __construct() {
         $this->eventoRepository = new EventoRepository();
     }
@@ -32,7 +32,9 @@ class EventoController extends BaseController{
 
     // GET /eventi/create
     public function create() {
-        return view('eventi.create');
+        $categoriaRepo = new CategoriaRepository();
+        $categorie = $categoriaRepo->all();
+        return view('eventi.create', compact('categorie'));
     }
 
     // POST /eventi
@@ -46,6 +48,7 @@ class EventoController extends BaseController{
                 'titolo' => $request['titolo'],
                 'descrizione' => $request['descrizione'] ?? null,
                 'data_evento' => $request['data_evento'],
+                'categoria_id' => (int) $request['categoria_id'],
                 'img_path' => $img_path,
                 'video_path' => $video_path,
                 'utente_id' => $_SESSION['user']['id']
@@ -72,7 +75,10 @@ class EventoController extends BaseController{
             return;
         }
         
-        return view('eventi.edit', compact('evento'));
+        $categoriaRepo = new CategoriaRepository();
+        $categorie = $categoriaRepo->all();
+
+        return view('eventi.edit', compact('evento', 'categorie'));
     }
 
     // POST /eventi/{id}/update
@@ -86,6 +92,7 @@ class EventoController extends BaseController{
             'titolo' => $titolo,
             'descrizione' => $descrizione,
             'data_evento' => $data_evento,
+            'categoria_id' => (int) $request['categoria_id'],
         ];
         $evento = $this->eventoRepository->findById($id);
 

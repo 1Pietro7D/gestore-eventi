@@ -1,26 +1,22 @@
 <?php
-class Evento {
-    public int $id;
-    public string $titolo;
-    public ?string $descrizione;
-    public string $data_evento;
-    public ?string $img_path;
-    public ?string $video_path;
-    public int $utente_id;
-    public ?int $categoria_id;
-    public string $created_at;
-    public string $updated_at;
+class Evento extends Model {
+    public int $id = 0;
+    public string $titolo = '';
+    public ?string $descrizione = null;
+    public string $data_evento = '';
+    public ?string $img_path = null;
+    public ?string $video_path = null;
+    public int $utente_id = 0;
+    public int $categoria_id = 0; // non null perché obbligatorio
+    public string $created_at = '';
+    public string $updated_at = '';
 
-    public function __construct(array $data) {
-        $this->id = (int) ($data['id'] ?? 0);
-        $this->titolo = $data['titolo'] ?? '';
-        $this->descrizione = $data['descrizione'] ?? null;
-        $this->data_evento = $data['data_evento'] ?? '';
-        $this->img_path = $data['img_path'] ?? null;
-        $this->video_path = $data['video_path'] ?? null;
-        $this->utente_id = (int) ($data['utente_id'] ?? 0);
-        $this->categoria_id = isset($data['categoria_id']) ? (int) $data['categoria_id'] : null;
-        $this->created_at = $data['created_at'] ?? '';
-        $this->updated_at = $data['updated_at'] ?? '';
+    public function categoria(): Categoria {
+        $repo = new CategoriaRepository();
+        $categoria = $repo->findById($this->categoria_id);
+        if (!$categoria) {
+            throw new RuntimeException("Categoria non trovata per categoria_id = {$this->categoria_id}");
+        }
+        return $categoria;
     }
 }
