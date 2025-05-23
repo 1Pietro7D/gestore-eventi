@@ -45,7 +45,12 @@ class UtenteController {
 
     // POST /utenti/{id}/delete
     public function destroy($id) {
+         $utente = $this->utenteRepository->findById($id);
+        if ($utente->ruolo == 'admin') {
+            Cache::clear('eventi_home');
+        }
         $this->utenteRepository->deleteById($id);
+       
         redirect("utenti.index");
     }
 }
