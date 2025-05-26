@@ -60,7 +60,11 @@ class EventoController extends BaseController{
             'categoria_id' => (int) $request['categoria_id'],
             'img_path' => $img_path,
             'video_path' => $video_path,
-            'utente_id' => $_SESSION['user']['id']
+            'utente_id' => $_SESSION['user']['id'],
+            'latitudine'=> $request['latitudine'],
+            'longitudine'=> $request['longitudine'],
+            'massimo_partecipanti' => isset($request['massimo_partecipanti']) ? (int) $request['massimo_partecipanti'] : 100,
+
         ];
         $nuovoEvento = $this->eventoRepository->create($data);
         Cache::clear('eventi_utente_' . $_SESSION['user']['id']);
@@ -96,6 +100,10 @@ class EventoController extends BaseController{
         $descrizione = $request['descrizione'];
         $data_evento = $request['data_evento'];
         $categoriaId = (int) $request['categoria_id'];
+        $latitudine= $request['latitudine'];
+        $longitudine= $request['longitudine'];
+        $massimo_partecipanti = isset($request['massimo_partecipanti']) ? (int) $request['massimo_partecipanti'] : 100;
+
         $errors = $this->validaEvento($request);
 
         if (!empty($errors)) {
@@ -110,6 +118,9 @@ class EventoController extends BaseController{
             'descrizione' => $descrizione,
             'data_evento' => $data_evento,
             'categoria_id' => $categoriaId,
+            'latitudine' => $latitudine,
+            'longitudine' => $longitudine,
+            'massimo_partecipanti' => $massimo_partecipanti,
         ];
         $evento = $this->eventoRepository->findById($id);
         if ($evento->utente_id != $_SESSION['user']['id']) {

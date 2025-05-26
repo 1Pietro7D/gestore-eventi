@@ -8,7 +8,9 @@ class Evento extends Model {
     public ?string $video_path = null;
     public int $utente_id = 0;
     public int $categoria_id = 0; // non null perché obbligatorio
-    public int $massimo_partecipanti = 100; // nuovo campo
+    public int $massimo_partecipanti = 100; 
+    public ?float $latitudine = null; 
+    public ?float $longitudine = null; 
     public string $created_at = '';
     public string $updated_at = '';
 

@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS eventi (
     utente_id INT NOT NULL,
     categoria_id INT NOT NULL,
     massimo_partecipanti INT NOT NULL DEFAULT 100,
+    latitudine DECIMAL(10,8),
+    longitudine DECIMAL(11,8),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (utente_id) REFERENCES utenti(id) ON DELETE CASCADE,

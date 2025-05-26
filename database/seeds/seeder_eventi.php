@@ -7,8 +7,13 @@ class DatabaseSeeder {
         $db = Database::connect();
 
         $stmt = $db->prepare("
-            INSERT INTO eventi (titolo, descrizione, data_evento, img_path, video_path, utente_id, categoria_id, massimo_partecipanti)
-            VALUES (:titolo, :descrizione, :data_evento, :img_path, :video_path, :utente_id, :categoria_id, :massimo_partecipanti)
+            INSERT INTO eventi (
+                titolo, descrizione, data_evento, img_path, video_path, utente_id, 
+                categoria_id, massimo_partecipanti, latitudine, longitudine
+            ) VALUES (
+                :titolo, :descrizione, :data_evento, :img_path, :video_path, :utente_id, 
+                :categoria_id, :massimo_partecipanti, :latitudine, :longitudine
+            )
         ");
 
         $eventi = [
@@ -19,8 +24,10 @@ class DatabaseSeeder {
                 'img_path' => '',
                 'video_path' => '',
                 'utente_id' => 1,
+                'categoria_id' => 1,
                 'massimo_partecipanti' => 50,
-                'categoria_id' => 1  // Workshop
+                'latitudine' => 45.4642,
+                'longitudine' => 9.1900 // Milano
             ],
             [
                 'titolo' => 'Corso di Cucina Vegana',
@@ -29,8 +36,10 @@ class DatabaseSeeder {
                 'img_path' => '',
                 'video_path' => '',
                 'utente_id' => 1,
+                'categoria_id' => 2,
                 'massimo_partecipanti' => 50,
-                'categoria_id' => 2  // Corsi di cucina
+                'latitudine' => 41.9028,
+                'longitudine' => 12.4964 // Roma
             ],
             [
                 'titolo' => 'Seminario di Crescita Personale',
@@ -39,8 +48,10 @@ class DatabaseSeeder {
                 'img_path' => '',
                 'video_path' => '',
                 'utente_id' => 1,
+                'categoria_id' => 3,
                 'massimo_partecipanti' => 50,
-                'categoria_id' => 3  // Sviluppo personale
+                'latitudine' => 43.7696,
+                'longitudine' => 11.2558 // Firenze
             ],
             [
                 'titolo' => 'Corso di Programmazione PHP',
@@ -49,8 +60,10 @@ class DatabaseSeeder {
                 'img_path' => '',
                 'video_path' => '',
                 'utente_id' => 1,
+                'categoria_id' => 5,
                 'massimo_partecipanti' => 50,
-                'categoria_id' => 5  // Informatica
+                'latitudine' => 45.0703,
+                'longitudine' => 7.6869 // Torino
             ]
         ];
 
