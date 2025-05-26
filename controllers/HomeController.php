@@ -7,9 +7,10 @@ class HomeController {
         $this->eventoRepository = new EventoRepository();
     }
     public function index() {
-        $eventi = Cache::remember('eventi_home' , 300, function () {
+        $eventi = Cache::remember('eventi_home' , 0, function () {
             return $this->eventoRepository->all();         
         });
+        
         return view('home', compact('eventi'));
     }
 }

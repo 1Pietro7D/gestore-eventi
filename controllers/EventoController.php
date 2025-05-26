@@ -9,7 +9,7 @@ class EventoController extends BaseController{
     // GET /eventi
     public function index() {
         $utenteId = $_SESSION['user']['id'];
-        return Cache::view('eventi_utente_' . $utenteId, 300, function () use ($utenteId) {
+        return Cache::view('eventi_utente_' . $utenteId, 0, function () use ($utenteId) {
             $eventi = $this->eventoRepository->findByUtenteId($utenteId);
             return view('eventi.index', compact('eventi'));          
         });
@@ -18,15 +18,18 @@ class EventoController extends BaseController{
 
     // GET /eventi/{id}
     public function show($id) { 
-        $evento = Cache::remember('eventi_show_' . $id .'_' . $_SESSION['user']['id'], 10, function () use ($id) {      
-                return $this->eventoRepository->findById($id);
+        $userId = $_SESSION['user']['id'] ?? 'guest';  // fallback se non loggato
+        $cacheKey = "eventi_show_{$id}_{$userId}";
+
+        $evento = Cache::remember($cacheKey, 10, function () use ($id) {
+            return $this->eventoRepository->findById($id);
         });
         if (!$evento) {
                 return "Evento non trovato."; 
         }
-        if ($evento->utente_id != $_SESSION['user']['id']) {
-            return "Non sei autorizzato a vedere questo evento.";   
-        }
+        // if ($evento->utente_id != $_SESSION['user']['id']) {
+        //     return "Non sei autorizzato a vedere questo evento.";   
+        // }
         return view('eventi.show', compact('evento'));
     }
 
@@ -88,6 +91,7 @@ class EventoController extends BaseController{
 
     // POST /eventi/{id}/update
     public function update($id, $request) {
+        
         $titolo = $request['titolo'];
         $descrizione = $request['descrizione'];
         $data_evento = $request['data_evento'];
@@ -108,7 +112,10 @@ class EventoController extends BaseController{
             'categoria_id' => $categoriaId,
         ];
         $evento = $this->eventoRepository->findById($id);
-
+        if ($evento->utente_id != $_SESSION['user']['id']) {
+            echo "Non sei autorizzato a modificare questo evento.";
+            return;
+        }
         $img_path = $this->uploadMedia($_FILES['img_file'], 'upload', $evento->img_path);
         $data['img_path'] = $img_path;
         
@@ -144,6 +151,71 @@ class EventoController extends BaseController{
         Cache::clear('eventi_utente_' . $evento->utente_id);
         Cache::clear('eventi_home');
         redirect('eventi.index');
+    }
+
+    public function iscriviti($id) {
+        if (!isset($_SESSION['user'])) {
+            redirect('login');
+            return;
+        }
+    
+        $evento = $this->eventoRepository->findById($id);
+        if (!$evento) {
+            echo "Evento non trovato.";
+            return;
+        }
+    
+        $repo = new EventoIscrizioneRepository();
+    
+        if ($repo->exists($evento->id, $_SESSION['user']['id'])) {
+            $_SESSION['errors'][] = "Sei già iscritto a questo evento.";
+            redirect('eventi.show', ['id' => $evento->id]);
+            return;
+        }
+    
+        if ($repo->countByEventoId($evento->id) >= $evento->massimo_partecipanti) {
+            $_SESSION['errors'][] = "Posti esauriti per questo evento.";
+            redirect('eventi.show', ['id' => $evento->id]);
+            return;
+        }
+    
+        $repo->create([
+            'evento_id' => $evento->id,
+            'utente_id' => $_SESSION['user']['id']
+        ]);
+    
+        $_SESSION['success'] = "Iscrizione avvenuta con successo!";
+        Cache::clear('eventi_home');
+        Cache::clear('eventi_show_' . $evento->id . '_' . $_SESSION['user']['id']);
+        redirect('eventi.show', ['id' => $evento->id]);
+    }
+
+    public function annullaIscrizione($id) {
+        if (!isset($_SESSION['user'])) {
+            redirect('login');
+            return;
+        }
+
+        $evento = $this->eventoRepository->findById($id);
+        if (!$evento) {
+            echo "Evento non trovato.";
+            return;
+        }
+
+        $repo = new EventoIscrizioneRepository();
+
+        if (!$repo->exists($evento->id, $_SESSION['user']['id'])) {
+            $_SESSION['errors'][] = "Non risulti iscritto a questo evento.";
+            redirect('eventi.show', ['id' => $evento->id]);
+            return;
+        }
+
+        $repo->deleteByEventoAndUtente($evento->id, $_SESSION['user']['id']);
+
+        $_SESSION['success'] = "Iscrizione annullata con successo.";
+        Cache::clear('eventi_home');
+        Cache::clear('eventi_show_' . $evento->id . '_' . $_SESSION['user']['id']);
+        redirect('eventi.show', ['id' => $evento->id]);
     }
 
     private function validaEvento(array $request): array {

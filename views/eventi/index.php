@@ -12,6 +12,7 @@
                 <th>ID</th>
                 <th>Titolo</th>
                 <th>Data Evento</th>
+                <th>Iscritti</th>
                 <th>Immagine</th>
                 <th>Video</th>
                 <th>Categoria</th>
@@ -25,6 +26,7 @@
                     <td><?= htmlspecialchars($evento->id) ?></td>
                     <td><?= htmlspecialchars($evento->titolo) ?></td>
                     <td><?= htmlspecialchars($evento->data_evento) ?></td>
+                    <p>Iscritti: <?= $evento->numeroIscritti() ?> / <?= $evento->massimo_partecipanti ?></p>
                     <td>
                         <?php if ($evento->img_path): ?>
                             <img src="/public<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="100">

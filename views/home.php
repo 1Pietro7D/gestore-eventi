@@ -33,6 +33,9 @@
                     <p>Categoria</p>
                     <p><?= htmlspecialchars($evento->categoria->nome) ?></p>          
                 </div>
+               
+                <p>Iscritti: <?= $evento->numeroIscritti() ?> / <?= $evento->massimo_partecipanti ?></p>
+
                 <div>
                     <?php if ($evento->img_path): ?>
                         <img src="/public<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="100">
@@ -48,6 +51,10 @@
                     <?php endif; ?>
                 </div>
                 <a href="/eventi/show/<?= $evento->id ?>">Visualizza</a>
+
+
+                
+
             </div>    
         <?php endforeach; ?>
     </div>

@@ -1,4 +1,7 @@
-<?php // php database/migrations/migrate_eventi_table.php // va creata dopo la tabella categorie
+<?php
+// php database/migrations/migrate_eventi_table.php
+// Va creata dopo la tabella categorie
+
 require_once __DIR__ . '/../Database.php';
 
 try {
@@ -13,6 +16,7 @@ CREATE TABLE IF NOT EXISTS eventi (
     video_path VARCHAR(255),
     utente_id INT NOT NULL,
     categoria_id INT NOT NULL,
+    massimo_partecipanti INT NOT NULL DEFAULT 100,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (utente_id) REFERENCES utenti(id) ON DELETE CASCADE,

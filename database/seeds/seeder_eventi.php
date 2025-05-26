@@ -7,8 +7,8 @@ class DatabaseSeeder {
         $db = Database::connect();
 
         $stmt = $db->prepare("
-            INSERT INTO eventi (titolo, descrizione, data_evento, img_path, video_path, utente_id, categoria_id)
-            VALUES (:titolo, :descrizione, :data_evento, :img_path, :video_path, :utente_id, :categoria_id)
+            INSERT INTO eventi (titolo, descrizione, data_evento, img_path, video_path, utente_id, categoria_id, massimo_partecipanti)
+            VALUES (:titolo, :descrizione, :data_evento, :img_path, :video_path, :utente_id, :categoria_id, :massimo_partecipanti)
         ");
 
         $eventi = [
@@ -19,6 +19,7 @@ class DatabaseSeeder {
                 'img_path' => '',
                 'video_path' => '',
                 'utente_id' => 1,
+                'massimo_partecipanti' => 50,
                 'categoria_id' => 1  // Workshop
             ],
             [
@@ -28,6 +29,7 @@ class DatabaseSeeder {
                 'img_path' => '',
                 'video_path' => '',
                 'utente_id' => 1,
+                'massimo_partecipanti' => 50,
                 'categoria_id' => 2  // Corsi di cucina
             ],
             [
@@ -37,6 +39,7 @@ class DatabaseSeeder {
                 'img_path' => '',
                 'video_path' => '',
                 'utente_id' => 1,
+                'massimo_partecipanti' => 50,
                 'categoria_id' => 3  // Sviluppo personale
             ],
             [
@@ -46,7 +49,8 @@ class DatabaseSeeder {
                 'img_path' => '',
                 'video_path' => '',
                 'utente_id' => 1,
-                'categoria_id' => 4  // Informatica
+                'massimo_partecipanti' => 50,
+                'categoria_id' => 5  // Informatica
             ]
         ];
 

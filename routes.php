@@ -33,11 +33,13 @@ return [
     [ 'method' => 'GET',   'url' => '/eventi',                 'handler' => 'EventoController@index',       'authorized' => true, 'role' => ['superadmin', 'admin'], 'view' => 'eventi.index'],
     [ 'method' => 'GET',   'url' => '/eventi/create',          'handler' => 'EventoController@create',      'authorized' => true, 'role' => ['superadmin', 'admin'], 'view' => 'eventi.create'],
     [ 'method' => 'POST',  'url' => '/eventi/store',           'handler' => 'EventoController@store',       'authorized' => true, 'role' => ['superadmin', 'admin']],
-    [ 'method' => 'GET',   'url' => '/eventi/show/{id}',       'handler' => 'EventoController@show',        'authorized' => true, 'role' => ['superadmin', 'admin'], 'view' => 'eventi.show'],
+    [ 'method' => 'GET',   'url' => '/eventi/show/{id}',       'handler' => 'EventoController@show',       /* 'authorized' => true, 'role' => ['superadmin', 'admin','user'],*/ 'view' => 'eventi.show'],
     [ 'method' => 'GET',   'url' => '/eventi/edit/{id}',       'handler' => 'EventoController@edit',        'authorized' => true, 'role' => ['superadmin', 'admin'], 'view' => 'eventi.edit'],
     [ 'method' => 'POST',  'url' => '/eventi/update/{id}',     'handler' => 'EventoController@update',      'authorized' => true, 'role' => ['superadmin', 'admin']],
     [ 'method' => 'POST',  'url' => '/eventi/delete/{id}',     'handler' => 'EventoController@destroy',     'authorized' => true, 'role' => ['superadmin', 'admin']],
-    
+    [ 'method' => 'POST',  'url' => '/eventi/{id}/iscriviti',  'handler' => 'EventoController@iscriviti',   'authorized' => true, 'role' => ['user', 'admin', 'superadmin'] ],
+    [ 'method' => 'POST',  'url' => '/eventi/{id}/annulla-iscrizione', 'handler' => 'EventoController@annullaIscrizione', 'authorized' => true, 'role' => ['user', 'admin', 'superadmin']],
+
     // CRUD Categorie
     [ 'method' => 'GET',   'url' => '/categorie',                'handler' => 'CategorieController@index',    'authorized' => true, 'role' => ['superadmin'], 'view' => 'categorie.index' ],
     [ 'method' => 'GET',   'url' => '/categorie/create',         'handler' => 'CategorieController@create',   'authorized' => true, 'role' => ['superadmin'], 'view' => 'categorie.create' ],
