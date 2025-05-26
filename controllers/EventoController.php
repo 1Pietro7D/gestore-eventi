@@ -230,31 +230,31 @@ class EventoController extends BaseController{
     }
 
     private function validaEvento(array $request): array {
-    $errors = [];
-
-    if (empty($request['titolo']) || strlen(trim($request['titolo'])) < 3) {
-        $errors[] = "Il titolo è obbligatorio e deve contenere almeno 3 caratteri.";
-    }
-
-    if (!empty($request['descrizione']) && strlen($request['descrizione']) > 1000) {
-        $errors[] = "La descrizione non può superare i 1000 caratteri.";
-    }
-
-    if (empty($request['data_evento']) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $request['data_evento'])) {
-        $errors[] = "Data evento non valida o mancante.";
-    }
-
-    $categoriaId = $request['categoria_id'] ?? null;
-    if (empty($categoriaId) || !is_numeric($categoriaId)) {
-        $errors[] = "Categoria obbligatoria.";
-    } else {
-        $categoriaRepo = new CategoriaRepository();
-        if (!$categoriaRepo->findById((int) $categoriaId)) {
-            $errors[] = "Categoria selezionata non valida.";
+        $errors = [];
+        
+        if (empty($request['titolo']) || strlen(trim($request['titolo'])) < 3) {
+            $errors[] = "Il titolo è obbligatorio e deve contenere almeno 3 caratteri.";
         }
+    
+        if (!empty($request['descrizione']) && strlen($request['descrizione']) > 1000) {
+            $errors[] = "La descrizione non può superare i 1000 caratteri.";
+        }
+    
+        if (empty($request['data_evento']) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $request['data_evento'])) {
+            $errors[] = "Data evento non valida o mancante.";
+        }
+    
+        $categoriaId = $request['categoria_id'] ?? null;
+        if (empty($categoriaId) || !is_numeric($categoriaId)) {
+            $errors[] = "Categoria obbligatoria.";
+        } else {
+            $categoriaRepo = new CategoriaRepository();
+            if (!$categoriaRepo->findById((int) $categoriaId)) {
+                $errors[] = "Categoria selezionata non valida.";
+            }
+        }
+    
+        return $errors;
     }
-
-    return $errors;
-}
 
 }
