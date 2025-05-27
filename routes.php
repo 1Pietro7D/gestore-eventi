@@ -17,9 +17,11 @@ return [
     [ 'method' => 'POST',   'url' => '/login',                 'handler' => 'Auth/AuthController@login' ],
     [ 'method' => 'GET',    'url' => '/logout',                'handler' => 'Auth/AuthController@logout' ],
     [ 'method' => 'POST',   'url' => '/delete',                'handler' => 'Auth/AuthController@deleteUser' ],
-    [ 'method' => 'GET',    'url' => '/register',              'handler' => 'Auth/AuthController@showRegister' , 'view' => 'registrer'],
+    [ 'method' => 'GET',    'url' => '/register',              'handler' => 'Auth/AuthController@showRegister' , 'view' => 'register'],
     [ 'method' => 'POST',   'url' => '/register',              'handler' => 'Auth/AuthController@register' ],
-
+    // Verifica OTP post-registrazione
+    [ 'method' => 'GET',    'url' => '/verifica-otp',          'handler' => 'Auth/AuthController@showVerificaOtp', 'view' => 'verifica-otp'],
+    [ 'method' => 'POST',   'url' => '/verifica-otp',          'handler' => 'Auth/AuthController@verificaOtp' ],
      // CRUD Utenti
     [ 'method' => 'GET',   'url' => '/utenti',                 'handler' => 'UtenteController@index',       'authorized' => true, 'role' => ['superadmin'], 'view' => 'utenti.index' ],
     [ 'method' => 'GET',   'url' => '/utenti/create',          'handler' => 'UtenteController@create',      'authorized' => true, 'role' => ['superadmin'], 'view' => 'utenti.create' ],

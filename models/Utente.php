@@ -5,6 +5,7 @@ class Utente extends Model {
     public $email;
     public $password;
     public $ruolo;
+    public $email_confermata;
 
     public function toSessionArray(): array {
         return [

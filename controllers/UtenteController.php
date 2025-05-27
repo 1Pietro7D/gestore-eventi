@@ -29,28 +29,63 @@ class UtenteController {
         redirect('utenti.show', ['id' => $newUser->id]);
     }
 
-    // GET /utenti/{id}/edit
+    // GET /utenti/edit/{id}
     public function edit($id) {
         $utente = $this->utenteRepository->findById($id);
         return view('utenti.edit', compact('utente'));
     }
 
-    // POST /utenti/{id}/update
+    // POST /utenti/update/{id}
     public function update($id, $request) {
-        
-    $this->utenteRepository->updateById($id, $request);
+        $errors = $this->validatore($request);
+
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            return redirect('utenti.edit', ['id' => $id]);            
+        }
+
+        $this->utenteRepository->updateById($id, $request);
         redirect('utenti.show', ['id' => $id]);
        
     }
 
-    // POST /utenti/{id}/delete
+    // POST /utenti/delete/{id}
     public function destroy($id) {
-         $utente = $this->utenteRepository->findById($id);
+        $utente = $this->utenteRepository->findById($id);
         if ($utente->ruolo == 'admin') {
             Cache::clear('eventi_home');
         }
         $this->utenteRepository->deleteById($id);
        
         redirect("utenti.index");
+    }
+    private function validatore(array $request): array {
+        $errors = [];
+
+        // Validazione email
+        if (empty($request['email']) || !filter_var($request['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Email non valida.';
+         } // else {
+        //     $existing = $this->utenteRepository->findByEmail($request['email']);
+        //     if ($existing) {
+        //         $errors['email'] = 'Email già registrata.';
+        //     }
+        // }
+
+        // // Validazione password (es. minimo 8 caratteri, niente caratteri sospetti)
+        if(!empty($request['password'])){
+            if ( strlen($request['password']) < 8) {
+                $errors['password'] = 'La password deve contenere almeno 8 caratteri.';
+            } elseif (preg_match('/[<>{};]/', $request['password'])) {
+                $errors['password'] = 'La password contiene caratteri non consentiti.';
+            }
+        }
+        // Validazione ruolo
+        $ruoliValidi = ['user', 'admin'];
+        if (empty($request['ruolo']) || !in_array($request['ruolo'], $ruoliValidi)) {
+            $errors['ruolo'] = 'Ruolo non valido. Deve essere user o admin.';
+        }
+
+        return $errors;
     }
 }
