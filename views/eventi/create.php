@@ -60,14 +60,14 @@
             <label for="video_file">Carica Video:</label><br>
             <input type="file" id="video_file" name="video_file" accept="video/*">
         </div>
-                    <div>
-    <label>Seleziona la posizione sulla mappa:</label>
-    <div id="map" style="height: 300px; margin-bottom: 1rem;"></div>
+        <div>
+            <label>Seleziona la posizione sulla mappa:</label>
+            <div id="map" style="height: 300px; margin-bottom: 1rem;"></div>
 
-    <!-- Campi nascosti -->
-    <input type="hidden" name="latitudine" id="latitudine">
-    <input type="hidden" name="longitudine" id="longitudine">
-</div>    
+            <!-- Campi nascosti -->
+            <input type="hidden" name="latitudine" id="latitudine">
+            <input type="hidden" name="longitudine" id="longitudine">
+        </div>    
         <button type="submit">?? Salva Evento</button>
     </form>
 

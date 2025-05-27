@@ -85,18 +85,29 @@
 
 
      <div id="map"></div>
-    <script>
-    const map = L.map('map').setView([<?= $evento->latitudine ?>, <?= $evento->longitudine ?>], 13);
+    <?php if (!is_null($evento->latitudine) && !is_null($evento->longitudine)): ?>
+        <script>
+            const map = L.map('map').setView([<?= $evento->latitudine ?>, <?= $evento->longitudine ?>], 13);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    L.marker([<?= $evento->latitudine ?>, <?= $evento->longitudine ?>])
-        .addTo(map)
-        .bindPopup("<?= htmlspecialchars($evento->titolo) ?>")
-        .openPopup();
-</script>
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        
+            L.marker([<?= $evento->latitudine ?>, <?= $evento->longitudine ?>])
+                .addTo(map)
+                .bindPopup("<?= htmlspecialchars($evento->titolo) ?>")
+                .openPopup();
+        </script>
+    <?php else: ?>
+        <script>
+            
+            map = L.map('map').setView([41.9028, 12.4964], 5); // vista generale su Italia
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        </script>
+    <?php endif; ?>
 </body>
 </html>

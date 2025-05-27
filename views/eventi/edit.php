@@ -61,8 +61,8 @@
         <div>
             <label>Seleziona la posizione sulla mappa:</label>
             <div id="map" style="height: 300px; margin-bottom: 1rem;"></div>
-            <input type="hidden" name="latitudine" id="latitudine" value="<?= $evento->lat ?>">
-            <input type="hidden" name="longitudine" id="longitudine" value="<?= $evento->lng ?>">
+            <input type="hidden" name="latitudine" id="latitudine" value="<?= $evento->latitudine ?>">
+            <input type="hidden" name="longitudine" id="longitudine" value="<?= $evento->longitudine ?>">
         </div>
 
         <h3>Aggiorna Immagine o Video</h3>
@@ -105,23 +105,41 @@
 
 
     <script>
-    const lat = <?= $evento->latitudine ?? 41.9028 ?>;
-    const lng = <?= $evento->longitudine ?? 12.4964 ?>;
-    const map = L.map('map').setView([lat, lng], 13);
+        const lat = <?= $evento->latitudine ?? 'null' ?>;
+        const lng = <?= $evento->longitudine ?? 'null' ?>;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+        const defaultLat = 41.9028; // Roma
+        const defaultLng = 12.4964;
 
-    let marker = L.marker([lat, lng]).addTo(map);
+        const map = L.map('map').setView(
+            [lat ?? defaultLat, lng ?? defaultLng],
+            13
+        );
 
-    map.on('click', function (e) {
-        const { lat, lng } = e.latlng;
-        marker.setLatLng([lat, lng]);
-        document.getElementById('latitudine').value = lat;
-        document.getElementById('longitudine').value = lng;
-    });
-</script>
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        let marker = null;
+
+        if (lat !== null && lng !== null) {
+            marker = L.marker([lat, lng]).addTo(map);
+        }
+
+        map.on('click', function (e) {
+            const { lat, lng } = e.latlng;
+
+            if (marker) {
+                marker.setLatLng([lat, lng]);
+            } else {
+                marker = L.marker([lat, lng]).addTo(map);
+            }
+
+            document.getElementById('latitudine').value = lat;
+            document.getElementById('longitudine').value = lng;
+        });
+    </script>
+
 </body>
 </html>

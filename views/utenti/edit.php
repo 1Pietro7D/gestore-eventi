@@ -7,7 +7,16 @@
 <body>
      <?php require_once __DIR__.  ('/../Components/header.php'); ?>
     <h1>Modifica utente</h1>
-
+    <?php
+    if (!empty($_SESSION['errors'])) {
+        echo '<ul style="color: red;">';
+        foreach ($_SESSION['errors'] as $campo => $errore) {
+            echo "<li><strong>$campo</strong> $errore</li>";
+        }
+        echo '</ul>';
+        unset($_SESSION['errors']); // Pulisci dopo aver mostrato
+    }
+?>
     <?php if ($utente): ?>
         <form action="/utenti/update/<?= $utente->id ?>" method="POST">
             <p>

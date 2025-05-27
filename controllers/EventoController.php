@@ -42,7 +42,7 @@ class EventoController extends BaseController{
 
     // POST /eventi
     public function store($request) {
-        $errors = $this->validaEvento($request);
+        $errors = $this->validatore($request);
 
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
@@ -61,8 +61,8 @@ class EventoController extends BaseController{
             'img_path' => $img_path,
             'video_path' => $video_path,
             'utente_id' => $_SESSION['user']['id'],
-            'latitudine'=> $request['latitudine'],
-            'longitudine'=> $request['longitudine'],
+            'latitudine'=> !empty($request['latitudine']) ? $request['latitudine'] : null,
+            'longitudine'=> !empty($request['longitudine']) ? $request['longitudine'] : null,
             'massimo_partecipanti' => isset($request['massimo_partecipanti']) ? (int) $request['massimo_partecipanti'] : 100,
 
         ];
@@ -100,11 +100,11 @@ class EventoController extends BaseController{
         $descrizione = $request['descrizione'];
         $data_evento = $request['data_evento'];
         $categoriaId = (int) $request['categoria_id'];
-        $latitudine= $request['latitudine'];
-        $longitudine= $request['longitudine'];
+        $latitudine= !empty($request['latitudine']) ? $request['latitudine'] : null;
+        $longitudine= !empty($request['longitudine']) ? $request['longitudine'] : null;
         $massimo_partecipanti = isset($request['massimo_partecipanti']) ? (int) $request['massimo_partecipanti'] : 100;
 
-        $errors = $this->validaEvento($request);
+        $errors = $this->validatore($request);
 
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
@@ -229,7 +229,7 @@ class EventoController extends BaseController{
         redirect('eventi.show', ['id' => $evento->id]);
     }
 
-    private function validaEvento(array $request): array {
+    private function validatore(array $request): array {
         $errors = [];
         
         if (empty($request['titolo']) || strlen(trim($request['titolo'])) < 3) {
