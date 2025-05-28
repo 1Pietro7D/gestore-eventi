@@ -25,6 +25,12 @@ class UtenteController {
 
     // POST /utenti
     public function store($request) {
+         $errors = $this->validatore($request);
+
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            return redirect('utenti.create');            
+        }
         $newUser = $this->utenteRepository->create($request);
         redirect('utenti.show', ['id' => $newUser->id]);
     }
@@ -37,13 +43,16 @@ class UtenteController {
 
     // POST /utenti/update/{id}
     public function update($id, $request) {
-        $errors = $this->validatore($request);
+        $errors = $this->validatore($request, $id);
 
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
             return redirect('utenti.edit', ['id' => $id]);            
         }
-
+        // Rimuove la password se lasciata vuota, così non viene aggiornata
+        if (empty($request['password'])) {
+            unset($request['password']);
+        }
         $this->utenteRepository->updateById($id, $request);
         redirect('utenti.show', ['id' => $id]);
        
@@ -59,18 +68,20 @@ class UtenteController {
        
         redirect("utenti.index");
     }
-    private function validatore(array $request): array {
+    private function validatore(array $request, int $id = 0): array {
         $errors = [];
 
-        // Validazione email
+        // Validazione email  
         if (empty($request['email']) || !filter_var($request['email'], FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'Email non valida.';
-         } // else {
-        //     $existing = $this->utenteRepository->findByEmail($request['email']);
-        //     if ($existing) {
-        //         $errors['email'] = 'Email già registrata.';
-        //     }
-        // }
+        }
+        
+        if ($id ==0 || $this->utenteRepository->findById($id)->email != $request['email']) {
+           $existing = $this->utenteRepository->findByEmail($request['email']);
+            if ($existing) {
+                $errors['email'] = 'Email già registrata.';
+            }
+        }
 
         // // Validazione password (es. minimo 8 caratteri, niente caratteri sospetti)
         if(!empty($request['password'])){
