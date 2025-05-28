@@ -253,6 +253,19 @@ class EventoController extends BaseController{
                 $errors[] = "Categoria selezionata non valida.";
             }
         }
+        // Validazione latitudine
+        if (!isset($request['latitudine']) || !is_numeric($request['latitudine'])) {
+            $errors[] = "Latitudine mancante o non valida.";
+        } elseif ($request['latitudine'] < -90 || $request['latitudine'] > 90) {
+            $errors[] = "La latitudine deve essere compresa tra -90 e 90.";
+        }
+    
+        // Validazione longitudine
+        if (!isset($request['longitudine']) || !is_numeric($request['longitudine'])) {
+            $errors[] = "Longitudine mancante o non valida.";
+        } elseif ($request['longitudine'] < -180 || $request['longitudine'] > 180) {
+            $errors[] = "La longitudine deve essere compresa tra -180 e 180.";
+        }
     
         return $errors;
     }
