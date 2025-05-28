@@ -18,7 +18,7 @@
             <li><a href="/categorie">categorie</a></li>
         <?php endif; ?>
     </ul>
-    <!-- <strong><?= htmlspecialchars($_SESSION['user']['ruolo']) ?></strong> -->
+    
 </nav>
 
 <style>
