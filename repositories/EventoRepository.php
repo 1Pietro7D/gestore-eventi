@@ -42,16 +42,17 @@ class EventoRepository extends BaseRepository {
     }
 
     
-        /**
-     * Restituisce tutti gli eventi associati a una determinata categoria.
-     * @param int $categoriaId
-     * @return array
-     */
-    public function findByCategoria(int $categoriaId): array {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE categoria_id = :categoria_id");
-        $stmt->execute([':categoria_id' => $categoriaId]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return array_map(fn($row) => new $this->modelClass($row), $rows);
+    /**
+    * Applica un filtro per selezionare solo gli eventi di una determinata categoria.
+    * Da usare in catena con get() o paginate().
+    *
+    * Esempio: $repo->findByCategoria(5)->paginate(10);
+    * oppure: $repo->findByCategoria(5)->get();
+    * @param int $categoriaId ID della categoria
+    * @return static Istanza del repository con filtro applicato
+    */
+    public function findByCategoria(int $categoriaId): static {
+        return $this->where('categoria_id', $categoriaId);
     }
 
 }

@@ -28,6 +28,17 @@
     
     <h1>Home</h1>
     <h2>Eventi</h2>
+    <form method="GET" action="">
+        <label for="categoria">Filtra per categoria:</label>
+        <select name="categoria" id="categoria" onchange="this.form.submit()">
+            <option value="">-- Tutte --</option>
+            <?php foreach ($categorie as $categoria): ?>
+                <option value="<?= $categoria->id ?>" <?= $categoriaId == $categoria->id ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($categoria->nome) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </form>
 
     <?php if (empty($paginazione['data'])): ?>
         <p>Nessun evento disponibile.</p>
@@ -77,17 +88,19 @@
                 Risultati da <?= $paginazione['from'] ?> a <?= $paginazione['to'] ?> su <?= $paginazione['total'] ?>
             </p>
 
+           
             <nav>
-                <a href="<?= $paginazione['first_page_url'] ?>">prima pagina</a>
+                <a href="<?= $paginazione['first_page_url'] . ($categoriaId ? '&categoria=' . $categoriaId : '') ?>">prima pagina</a>
                 <?php if ($paginazione['prev_page_url']): ?>
-                    <a href="<?= $paginazione['prev_page_url'] ?>">Precedente</a>
+                    <a href="<?= $paginazione['prev_page_url'] . ($categoriaId ? '&categoria=' . $categoriaId : '') ?>">Precedente</a>
                 <?php endif; ?>
-
+                
                 <?php if ($paginazione['next_page_url']): ?>
-                    <a href="<?= $paginazione['next_page_url'] ?>">Successiva</a>
+                    <a href="<?= $paginazione['next_page_url'] . ($categoriaId ? '&categoria=' . $categoriaId : '') ?>">Successiva</a>
                 <?php endif; ?>
-                <a href="<?= $paginazione['last_page_url'] ?>">ultima pagina</a>
+                <a href="<?= $paginazione['last_page_url'] . ($categoriaId ? '&categoria=' . $categoriaId : '') ?>">ultima pagina</a>
             </nav>
+
         </div>
     <?php endif; ?>
 </body>
