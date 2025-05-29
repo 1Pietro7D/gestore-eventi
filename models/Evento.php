@@ -1,7 +1,7 @@
 <?php
-class Evento extends Model {
-    public int $id = 0;
-    public string $titolo = '';
+class Evento extends Prodotto {
+    // public int $id = 0;
+    // public string $titolo = '';
     public ?string $descrizione = null;
     public string $data_evento = '';
     public ?string $img_path = null;
@@ -30,6 +30,18 @@ class Evento extends Model {
     public function isUtenteIscritto(int $utenteId): bool {
         $repo = new EventoIscrizioneRepository();
         return $repo->exists($this->id, $utenteId);
+    }
+    
+    public function descrizione(): string {
+        return "Partecipazione all'evento: {$this->titolo}";
+    }
+
+    public function urlSuccesso(): string {
+        return "http://localhost:8000/pagamento/successo/evento/{$this->id}";
+    }
+
+    public function urlAnnullato(): string {
+        return "http://localhost:8000/pagamento/annullato/evento/{$this->id}";
     }
 
 }

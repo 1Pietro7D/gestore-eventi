@@ -9,10 +9,10 @@ class EventoFactory {
         $stmt = $db->prepare("
             INSERT INTO eventi (
                 titolo, descrizione, data_evento, img_path, video_path, utente_id, 
-                categoria_id, massimo_partecipanti, latitudine, longitudine
+                categoria_id, massimo_partecipanti, latitudine, longitudine, prezzo
             ) VALUES (
                 :titolo, :descrizione, :data_evento, :img_path, :video_path, :utente_id, 
-                :categoria_id, :massimo_partecipanti, :latitudine, :longitudine
+                :categoria_id, :massimo_partecipanti, :latitudine, :longitudine, :prezzo
             )
         ");
 
@@ -30,7 +30,8 @@ class EventoFactory {
                 'categoria_id' => $categorie[array_rand($categorie)],
                 'massimo_partecipanti' => rand(10, 100),
                 'latitudine' => mt_rand(37000000, 46000000) / 1_000_000,   // tra 37.0 e 46.0
-                'longitudine' => mt_rand(8000000, 13000000) / 1_000_000    // tra 8.0 e 13.0
+                'longitudine' => mt_rand(8000000, 13000000) / 1_000_000,    // tra 8.0 e 13.0
+                'prezzo' => rand(1000, 10000) / 100.0 // tra 10.00€ e 100.00€
             ];
 
             $stmt->execute($data);

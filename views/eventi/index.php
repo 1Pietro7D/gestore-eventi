@@ -16,6 +16,7 @@
                 <th>Immagine</th>
                 <th>Video</th>
                 <th>Categoria</th>
+                <th>Prezzo</th>
                 <th>Azioni</th>
                
             </tr>
@@ -43,6 +44,9 @@
                     </td>
                     <td>
                         <?= htmlspecialchars($evento->categoria->nome) ?>
+                    </td>
+                    <td>
+                        <?= htmlspecialchars($evento->prezzo) ?>
                     </td>
                     <td>
                         <a href="/eventi/show/<?= $evento->id ?>">Visualizza</a> |

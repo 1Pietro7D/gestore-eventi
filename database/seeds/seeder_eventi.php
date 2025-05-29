@@ -9,10 +9,10 @@ class DatabaseSeeder {
         $stmt = $db->prepare("
             INSERT INTO eventi (
                 titolo, descrizione, data_evento, img_path, video_path, utente_id, 
-                categoria_id, massimo_partecipanti, latitudine, longitudine
+                categoria_id, massimo_partecipanti, latitudine, longitudine, prezzo
             ) VALUES (
                 :titolo, :descrizione, :data_evento, :img_path, :video_path, :utente_id, 
-                :categoria_id, :massimo_partecipanti, :latitudine, :longitudine
+                :categoria_id, :massimo_partecipanti, :latitudine, :longitudine, :prezzo
             )
         ");
 
@@ -27,7 +27,8 @@ class DatabaseSeeder {
                 'categoria_id' => 1,
                 'massimo_partecipanti' => 50,
                 'latitudine' => 45.4642,
-                'longitudine' => 9.1900 // Milano
+                'longitudine' => 9.1900,
+                'prezzo' => 39.90
             ],
             [
                 'titolo' => 'Corso di Cucina Vegana',
@@ -39,7 +40,8 @@ class DatabaseSeeder {
                 'categoria_id' => 2,
                 'massimo_partecipanti' => 50,
                 'latitudine' => 41.9028,
-                'longitudine' => 12.4964 // Roma
+                'longitudine' => 12.4964,
+                'prezzo' => 29.00
             ],
             [
                 'titolo' => 'Seminario di Crescita Personale',
@@ -51,7 +53,8 @@ class DatabaseSeeder {
                 'categoria_id' => 3,
                 'massimo_partecipanti' => 50,
                 'latitudine' => 43.7696,
-                'longitudine' => 11.2558 // Firenze
+                'longitudine' => 11.2558,
+                'prezzo' => 49.00
             ],
             [
                 'titolo' => 'Corso di Programmazione PHP',
@@ -63,7 +66,8 @@ class DatabaseSeeder {
                 'categoria_id' => 5,
                 'massimo_partecipanti' => 50,
                 'latitudine' => 45.0703,
-                'longitudine' => 7.6869 // Torino
+                'longitudine' => 7.6869,
+                'prezzo' => 59.00
             ]
         ];
 

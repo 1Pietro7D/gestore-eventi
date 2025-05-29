@@ -59,7 +59,7 @@
                     </div>
 
                     <p>Iscritti: <?= $evento->numeroIscritti() ?> / <?= $evento->massimo_partecipanti ?></p>
-
+                    
                     <div>
                         <?php if ($evento->img_path): ?>
                             <img src="/public<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="100">
@@ -75,7 +75,9 @@
                             <p>Nessun video</p>
                         <?php endif; ?>
                     </div>
-
+                    <div>
+                        <p><strong>Prezzo:</strong> € <?= number_format($evento->prezzo, 2, ',', '.') ?></p>
+                    </div>
                     <a href="/eventi/show/<?= $evento->id ?>">Visualizza</a>
                 </div>
             <?php endforeach; ?>

@@ -48,6 +48,10 @@
             </select>
         </div>
         <div>
+            <label for="prezzo">Prezzo:</label><br>
+            <input type="number" id="prezzo" name="prezzo" min="0" value="0" step="0.01" required>
+        </div>
+        <div>
             <label for="massimo_partecipanti">Numero massimo di partecipanti:</label><br>
             <input type="number" id="massimo_partecipanti" name="massimo_partecipanti" min="1" value="50" required>
         </div>

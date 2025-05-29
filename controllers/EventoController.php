@@ -64,6 +64,7 @@ class EventoController extends BaseController{
             'latitudine'=> !empty($request['latitudine']) ? $request['latitudine'] : null,
             'longitudine'=> !empty($request['longitudine']) ? $request['longitudine'] : null,
             'massimo_partecipanti' => isset($request['massimo_partecipanti']) ? (int) $request['massimo_partecipanti'] : 100,
+            'prezzo' => isset($request['prezzo']) ? (float) $request['prezzo'] : 0.0,
 
         ];
         $nuovoEvento = $this->eventoRepository->create($data);
@@ -95,7 +96,7 @@ class EventoController extends BaseController{
 
     // POST /eventi/{id}/update
     public function update($id, $request) {
-        
+        $prezzo = isset($request['prezzo']) ? (float) $request['prezzo'] : 0.0;
         $titolo = $request['titolo'];
         $descrizione = $request['descrizione'];
         $data_evento = $request['data_evento'];
@@ -121,6 +122,7 @@ class EventoController extends BaseController{
             'latitudine' => $latitudine,
             'longitudine' => $longitudine,
             'massimo_partecipanti' => $massimo_partecipanti,
+            'prezzo' => $prezzo,
         ];
         $evento = $this->eventoRepository->findById($id);
         if ($evento->utente_id != $_SESSION['user']['id']) {
@@ -266,7 +268,16 @@ class EventoController extends BaseController{
         } elseif ($request['longitudine'] < -180 || $request['longitudine'] > 180) {
             $errors[] = "La longitudine deve essere compresa tra -180 e 180.";
         }
-    
+        $prezzoMassimo = 1000;
+        if (!isset($request['prezzo']) || !is_numeric($request['prezzo']) || $request['prezzo'] < 0) {
+            $errors[] = "Il prezzo deve essere un numero positivo.";
+        } elseif ($request['prezzo'] > $prezzoMassimo) {
+            $errors[] = "Il prezzo massimo consentito è {$prezzoMassimo} €.";
+        }
+        // Validazione numero massimo di partecipanti
+        if (!isset($request['massimo_partecipanti']) || !is_numeric($request['massimo_partecipanti']) || $request['massimo_partecipanti'] <= 0) {
+            $errors[] = "Il numero massimo di partecipanti deve essere un intero positivo.";
+        }
         return $errors;
     }
 

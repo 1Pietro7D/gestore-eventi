@@ -40,7 +40,11 @@
             <label for="data_evento">Data Evento:</label><br>
             <input type="date" id="data_evento" name="data_evento" value="<?= htmlspecialchars($evento->data_evento) ?>" required>
         </div>
-
+        <div>
+            <label for="prezzo">Prezzo (€):</label><br>
+            <input type="number" id="prezzo" name="prezzo" min="0" step="0.01"
+                value="<?= htmlspecialchars($evento->prezzo) ?>" required>
+        </div> 
         <div>
             <label for="categoria_id">Categoria:</label><br>
             <select name="categoria_id" id="categoria_id" required>
