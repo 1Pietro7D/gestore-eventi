@@ -1,5 +1,4 @@
 <?php
-
 class CategorieController extends BaseController {
     protected CategoriaRepository $categoriaRepository;
 

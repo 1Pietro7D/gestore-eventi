@@ -49,5 +49,11 @@ return [
     [ 'method' => 'GET',   'url' => '/categorie/edit/{id}',      'handler' => 'CategorieController@edit',     'authorized' => true, 'role' => ['superadmin'], 'view' => 'categorie.edit' ],
     [ 'method' => 'POST',  'url' => '/categorie/update/{id}',    'handler' => 'CategorieController@update',   'authorized' => true, 'role' => ['superadmin'] ],
     [ 'method' => 'POST',  'url' => '/categorie/delete/{id}',    'handler' => 'CategorieController@destroy',  'authorized' => true, 'role' => ['superadmin'] ],
-
+    // Rotte Pagamenti
+    ['method' => 'GET',  'url' => '/carrello',                 'handler' => 'CartController@index',   'view' => 'cart.index'],
+    ['method' => 'POST', 'url' => '/carrello/aggiungi/{id}',   'handler' => 'CartController@add'],
+    ['method' => 'POST', 'url' => '/carrello/rimuovi/{id}',    'handler' => 'CartController@remove'],
+    ['method' => 'GET',  'url' => '/checkout',                 'handler' => 'CheckoutController@index'],
+    ['method' => 'GET',  'url' => '/checkout/successo',        'handler' => 'CheckoutController@success'],
+    ['method' => 'GET',  'url' => '/checkout/cancellato',      'handler' => 'CheckoutController@cancel'],
 ];

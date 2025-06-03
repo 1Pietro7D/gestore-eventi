@@ -25,7 +25,15 @@
 </head>
 <body>
     <?php require_once __DIR__ . '/Components/header.php'; ?>
-    
+    <?php if (FlashMessages::has()): ?>
+        <?php foreach (FlashMessages::get() as $type => $messages): ?>
+            <?php foreach ($messages as $message): ?>
+                <div class="alert alert-<?= htmlspecialchars($type) ?>">
+                    <?= htmlspecialchars($message) ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
     <h1>Home</h1>
     <h2>Eventi</h2>
     <form method="GET" action="">

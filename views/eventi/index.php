@@ -46,7 +46,7 @@
                         <?= htmlspecialchars($evento->categoria->nome) ?>
                     </td>
                     <td>
-                        <?= htmlspecialchars($evento->prezzo) ?>
+                        €<?= htmlspecialchars($evento->prezzo) ?>
                     </td>
                     <td>
                         <a href="/eventi/show/<?= $evento->id ?>">Visualizza</a> |

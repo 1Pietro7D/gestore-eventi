@@ -110,5 +110,21 @@
             }).addTo(map);
         </script>
     <?php endif; ?>
+    <form method="POST" action="/carrello/aggiungi/<?= $evento->id ?>">
+        <label for="quantità">Quantità:</label>
+        <input type="number" id="quantità" name="quantita" value="1" min="1" max="10" required>
+        <button type="submit">Aggiungi al carrello</button>
+    </form>
+
+    
+    <?php if (FlashMessages::has()): ?>
+        <?php foreach (FlashMessages::get() as $type => $messages): ?>
+            <?php foreach ($messages as $message): ?>
+                <div class="alert alert-<?= htmlspecialchars($type) ?>">
+                    <?= htmlspecialchars($message) ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </body>
 </html>
