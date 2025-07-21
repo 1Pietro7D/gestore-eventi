@@ -1,5 +1,5 @@
 <?php
-class UtenteController {
+class UtenteController extends BaseController{
     protected UtenteRepository $utenteRepository;
 
     public function __construct() {
@@ -25,7 +25,8 @@ class UtenteController {
 
     // POST /utenti
     public function store($request) {
-         $errors = $this->validatore($request);
+        $request = $this->sanitizeRequest($request);
+        $errors = $this->validatore($request);
 
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
@@ -43,13 +44,14 @@ class UtenteController {
 
     // POST /utenti/update/{id}
     public function update($id, $request) {
+        $request = $this->sanitizeRequest($request);
         $errors = $this->validatore($request, $id);
 
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
             return redirect('utenti.edit', ['id' => $id]);            
         }
-        // Rimuove la password se lasciata vuota, così non viene aggiornata
+        // Rimuove la password se lasciata vuota, cosï¿½ non viene aggiornata
         if (empty($request['password'])) {
             unset($request['password']);
         }
@@ -79,7 +81,7 @@ class UtenteController {
         if ($id ==0 || $this->utenteRepository->findById($id)->email != $request['email']) {
            $existing = $this->utenteRepository->findByEmail($request['email']);
             if ($existing) {
-                $errors['email'] = 'Email già registrata.';
+                $errors['email'] = 'Email giï¿½ registrata.';
             }
         }
 

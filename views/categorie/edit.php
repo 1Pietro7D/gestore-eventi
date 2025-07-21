@@ -2,6 +2,7 @@
 <h1>Modifica Categoria</h1>
 
 <form action="/categorie/update/<?= $categoria->id ?>" method="POST">
+    <?= csrf_field() ?>
     <label for="nome">Nome categoria:</label>
     <input type="text" id="nome" name="nome" value="<?= htmlspecialchars($categoria->nome) ?>" required>
     <br><br>

@@ -24,6 +24,7 @@
     <?php endif; ?>
 
     <form action="/eventi/store" method="POST" enctype="multipart/form-data">
+        <?= csrf_field() ?>
         <div>
             <label for="titolo">Titolo:</label><br>
             <input type="text" id="titolo" name="titolo" required>

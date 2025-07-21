@@ -30,4 +30,12 @@ class Cart {
         }
         return $total;
     }
+    
+    public static function count(): int {
+        $count = 0;
+        foreach (self::items() as $item) {
+            $count += $item['quantita'];
+        }
+        return $count;
+    }
 }

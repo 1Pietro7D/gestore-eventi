@@ -1,5 +1,5 @@
 <?php
-class CartController {
+class CartController extends BaseController{
 
     public function index() {
         return view('cart.index', ['cartItems' => Cart::items(), 'total' => Cart::total()]);
@@ -8,7 +8,7 @@ class CartController {
     public function add($id, $request) {
         $quantita = isset($request['quantita']) ? max(1, (int)$request['quantita']) : 1;
         if($quantita < 1){
-            FlashMessages::add('error', 'La quantità dev\'essere minimo di 1.');
+            FlashMessages::add('error', 'La quantitï¿½ dev\'essere minimo di 1.');
             redirect('eventi/show/' . $id);
         }
         $repo = new EventoRepository();

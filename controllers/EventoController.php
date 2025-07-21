@@ -42,6 +42,7 @@ class EventoController extends BaseController{
 
     // POST /eventi
     public function store($request) {
+        $request = $this->sanitizeRequest($request);
         $errors = $this->validatore($request);
 
         if (!empty($errors)) {
@@ -96,6 +97,9 @@ class EventoController extends BaseController{
 
     // POST /eventi/{id}/update
     public function update($id, $request) {
+        $request = $this->sanitizeRequest($request);
+        $errors = $this->validatore($request);
+        
         $prezzo = isset($request['prezzo']) ? (float) $request['prezzo'] : 0.0;
         $titolo = $request['titolo'];
         $descrizione = $request['descrizione'];
@@ -104,8 +108,6 @@ class EventoController extends BaseController{
         $latitudine= !empty($request['latitudine']) ? $request['latitudine'] : null;
         $longitudine= !empty($request['longitudine']) ? $request['longitudine'] : null;
         $massimo_partecipanti = isset($request['massimo_partecipanti']) ? (int) $request['massimo_partecipanti'] : 100;
-
-        $errors = $this->validatore($request);
 
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
@@ -150,14 +152,15 @@ class EventoController extends BaseController{
             echo "Evento non trovato.";
             return;
         }
-        $this->deleteMedia($evento->img_path);
-        $this->deleteMedia($evento->video_path);  
-
         if ($evento->utente_id != $_SESSION['user']['id']) {
             echo "Non sei autorizzato a eliminare questo evento.";
             return;
         }
 
+        $this->deleteMedia($evento->img_path);
+        $this->deleteMedia($evento->video_path);  
+
+        
         $this->eventoRepository->deleteById($id);
       
         Cache::clear('eventi_show_' . $id .'_' . $_SESSION['user']['id']);
@@ -181,7 +184,7 @@ class EventoController extends BaseController{
         $repo = new EventoIscrizioneRepository();
     
         if ($repo->exists($evento->id, $_SESSION['user']['id'])) {
-            $_SESSION['errors'][] = "Sei già iscritto a questo evento.";
+            $_SESSION['errors'][] = "Sei giï¿½ iscritto a questo evento.";
             redirect('eventi.show', ['id' => $evento->id]);
             return;
         }
@@ -235,11 +238,11 @@ class EventoController extends BaseController{
         $errors = [];
         
         if (empty($request['titolo']) || strlen(trim($request['titolo'])) < 3) {
-            $errors[] = "Il titolo è obbligatorio e deve contenere almeno 3 caratteri.";
+            $errors[] = "Il titolo ï¿½ obbligatorio e deve contenere almeno 3 caratteri.";
         }
     
         if (!empty($request['descrizione']) && strlen($request['descrizione']) > 1000) {
-            $errors[] = "La descrizione non può superare i 1000 caratteri.";
+            $errors[] = "La descrizione non puï¿½ superare i 1000 caratteri.";
         }
     
         if (empty($request['data_evento']) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $request['data_evento'])) {
@@ -272,7 +275,7 @@ class EventoController extends BaseController{
         if (!isset($request['prezzo']) || !is_numeric($request['prezzo']) || $request['prezzo'] < 0) {
             $errors[] = "Il prezzo deve essere un numero positivo.";
         } elseif ($request['prezzo'] > $prezzoMassimo) {
-            $errors[] = "Il prezzo massimo consentito è {$prezzoMassimo} €.";
+            $errors[] = "Il prezzo massimo consentito ï¿½ {$prezzoMassimo} ï¿½.";
         }
         // Validazione numero massimo di partecipanti
         if (!isset($request['massimo_partecipanti']) || !is_numeric($request['massimo_partecipanti']) || $request['massimo_partecipanti'] <= 0) {

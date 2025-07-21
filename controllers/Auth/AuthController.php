@@ -1,5 +1,5 @@
 <?php
-class AuthController {
+class AuthController extends BaseController{
     protected $utenteRepository;
 
     public function __construct() {
@@ -38,7 +38,7 @@ class AuthController {
 
         $this->utenteRepository->deleteById($_SESSION['user']['id']);
         unset($_SESSION['user']);
-        echo "Il tuo account è stato cancellato.";
+        echo "Il tuo account ï¿½ stato cancellato.";
     }
 
     public function showRegister() {
@@ -46,6 +46,7 @@ class AuthController {
     }
 
     public function register($request) {
+        $request = $this->sanitizeRequest($request);
         $errors = $this->validatore($request);
 
         if (!empty($errors)) {
@@ -65,8 +66,8 @@ class AuthController {
         $stmt->execute([$user->id, $otp]);
 
         // Invia OTP via email
-        $html = "<p>Il tuo codice OTP è: <strong>$otp</strong></p>";
-        require_once __DIR__.('/../../core/Mail.php');
+        $html = "<p>Il tuo codice OTP ï¿½: <strong>$otp</strong></p>";
+        require_once __DIR__.('/../../utils/Gmail.php');
         sendOtpWithGmail($html, $user->email);
 
         // Memorizza user_id in sessione per conferma OTP
@@ -120,7 +121,7 @@ class AuthController {
         } else {
             $existing = $this->utenteRepository->findByEmail($request['email']);
             if ($existing) {
-                $errors['email'] = 'Email già registrata.';
+                $errors['email'] = 'Email giï¿½ registrata.';
             }
         }
 

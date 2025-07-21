@@ -17,14 +17,22 @@
             <li><a href="/utenti">utenti</a></li>
             <li><a href="/categorie">categorie</a></li>
         <?php endif; ?>
+        
     </ul>
-    
+    <ul>
+        <li><?php require __DIR__ . '/cart-icon.php'; ?></li>
+    </ul>
 </nav>
 
 <style>
+    nav{
+        display: flex;
+        justify-content: space-between;
+    }
     .navbar{
         display: flex;
         gap: 2rem;
+        justify-content: space-between;
     }
 </style>
 

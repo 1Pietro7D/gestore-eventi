@@ -5,7 +5,7 @@ class BaseController {
         $uploadDir = $baseDir . '/' . trim($subdirectory, '/');
 
         // Elimina file vecchio se presente
-        $this->deleteMedia($oldPath);
+        // $this->deleteMedia($oldPath);
 
         if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK || !is_uploaded_file($file['tmp_name'])) {
             return null;
@@ -21,6 +21,8 @@ class BaseController {
         $targetPath = $uploadDir . '/' . $filename;
     
         if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+            // Elimina il vecchio file solo se il nuovo upload è andato a buon fine
+            $this->deleteMedia($oldPath);
             return '/' . trim($subdirectory, '/') . '/' . $filename;
         }
     
@@ -34,5 +36,11 @@ class BaseController {
                 unlink($oldFullPath);
             }
         }
+    }
+    function sanitizeRequest(array $request, array $exclude = ['_token']): array {
+        foreach ($exclude as $key) {
+            unset($request[$key]);
+        }
+        return $request;
     }
 }

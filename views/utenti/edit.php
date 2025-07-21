@@ -19,6 +19,7 @@
 ?>
     <?php if ($utente): ?>
         <form action="/utenti/update/<?= $utente->id ?>" method="POST">
+        <?= csrf_field() ?>
             <p>
                 <label for="nome">Nome:</label>
                 <input type="text" name="nome" id="nome" value="<?= htmlspecialchars($utente->nome) ?>" required>

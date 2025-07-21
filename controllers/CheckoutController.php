@@ -7,14 +7,14 @@ $dotenv = Dotenv::createImmutable(dirname(__DIR__));
 // Carichiamo le variabili d'ambiente dal file .env
 $dotenv->load();
 
-class CheckoutController {
+class CheckoutController extends BaseController{
 
     public function index() {
         
     $items = Cart::items();
 
     if (empty($items)) {
-        FlashMessages::add('error', 'Il tuo carrello è vuoto.');
+        FlashMessages::add('error', 'Il tuo carrello ï¿½ vuoto.');
         redirect('cart.index');
     }
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);

@@ -9,6 +9,7 @@
     }
 ?>
 <form method="POST" action="/verifica-otp">
+    <?= csrf_field() ?>
     <label for="otp">Inserisci il codice OTP ricevuto via email:</label>
     <input type="text" name="otp" maxlength="6" required>
     <button type="submit">Verifica</button>

@@ -10,6 +10,7 @@
     }
 ?>
 <form method="POST" action="/login">
+    <?= csrf_field() ?>
     <label>Email: <input type="email" name="email" required></label><br>
     <label>Password: <input type="password" name="password" required></label><br>
     <button>Login</button>

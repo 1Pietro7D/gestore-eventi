@@ -2,6 +2,7 @@
 <h1>Nuova Categoria</h1>
 
 <form action="/categorie/store" method="POST">
+    <?= csrf_field() ?>
     <label for="nome">Nome categoria:</label>
     <input type="text" id="nome" name="nome" required>
     <br><br>

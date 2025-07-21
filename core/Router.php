@@ -46,6 +46,12 @@ class Router {
             }
         }
 
+        if ($method === 'POST' && !Csrf::check($_POST['_token'] ?? '')) {
+            http_response_code(419);
+            echo 'CSRF token mismatch';
+            return;
+        }
+
         [$controllerPathPart, $methodName] = explode('@', $route['handler'] . '@index');
         $controllerPath = __DIR__ . '/../controllers/' . $controllerPathPart . '.php';
 

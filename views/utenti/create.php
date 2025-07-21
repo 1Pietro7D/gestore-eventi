@@ -9,6 +9,7 @@
     <h1>Crea nuovo utente</h1>
 
     <form action="/utenti/store" method="POST">
+        <?= csrf_field() ?>
         <p>
             <label for="nome">Nome:</label>
             <input type="text" name="nome" id="nome" required>
