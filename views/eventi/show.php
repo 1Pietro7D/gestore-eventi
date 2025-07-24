@@ -37,14 +37,19 @@
         </div>
     <?php endif; ?>
 
-
+    <form method="POST" action="/eventi/<?= $evento->id ?>/annulla-iscrizione">
+                <?= csrf_field() ?>
+                <button type="submit">Cancella iscrizione</button>
+            </form>
     <?php if (isset($_SESSION['user'])): ?>
         <?php if ($evento->isUtenteIscritto($_SESSION['user']['id'])): ?>
             <form method="POST" action="/eventi/<?= $evento->id ?>/annulla-iscrizione">
+                <?= csrf_field() ?>
                 <button type="submit">Cancella iscrizione</button>
             </form>
         <?php else: ?>
             <form method="POST" action="/eventi/<?= $evento->id ?>/iscriviti">
+                <?= csrf_field() ?>
                 <button type="submit">Iscriviti all'evento</button>
             </form>
         <?php endif; ?>
@@ -72,8 +77,8 @@
             Nessun video disponibile.
         <?php endif; ?>
     </p>
-
-    <?php if (isset($_SESSION['user']) && $_SESSION['user']['id'] === $evento->utente_id): ?>
+    
+    <?php if ( isset($_SESSION['user']) && $_SESSION['user']['ruolo']==='superadmin' || isset($_SESSION['user']) && $_SESSION['user']['id'] === $evento->utente_id): ?>
         <a href="/eventi/edit/<?= $evento->id ?>">Modifica Evento</a> |
         <form action="/eventi/delete/<?= $evento->id ?>" method="POST" style="display:inline;" onsubmit="return confirm('Sei sicuro di voler eliminare questo evento?');">
             <button type="submit">Elimina Evento</button>
