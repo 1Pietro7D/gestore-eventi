@@ -7,26 +7,28 @@ class AuthController extends BaseController{
     }
 
     public function showLogin() {
-        return view('login');
+        return view('authentication.login');
     }
 
     public function login($request) {
         $user = $this->utenteRepository->findByEmail($request['email']);
         if ($user && password_verify($request['password'], $user->password)) {
             if (!$user->email_confermata) {
-                return redirect('verifica-otp');               
+                return redirect('authentication.verifica-otp');               
             }
+             // ✅ Protezione contro session fixation
+            session_regenerate_id(true);
             $_SESSION['user'] = $user->toSessionArray();
             redirect('home');
         } else {
             $_SESSION['errors']['credenziali'] = "non valide";
-            redirect('login');
+            redirect('authentication.login');
         }
     }
 
     public function logout() {
         session_destroy();
-        redirect('login');
+        redirect('authentication.login');
     }
 
     public function deleteUser() {
@@ -42,7 +44,7 @@ class AuthController extends BaseController{
     }
 
     public function showRegister() {
-        return view('register');
+        return view('authentication.register');
     }
 
     public function register($request) {
@@ -51,7 +53,7 @@ class AuthController extends BaseController{
 
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
-            return redirect('register');            
+            return redirect('authentication.register');            
         }
 
         // Crea l'utente (email_confermata rimane 0 di default)
@@ -73,11 +75,11 @@ class AuthController extends BaseController{
         // Memorizza user_id in sessione per conferma OTP
         $_SESSION['otp_user_id'] = $user->id;
 
-        redirect('verifica-otp');
+        redirect('authentication.verifica-otp');
     }
 
     public function showVerificaOtp() {
-        return view('verifica-otp');
+        return view('authentication.verifica-otp');
     }
     public function verificaOtp($request) {
         if (!isset($_SESSION['otp_user_id'])) {
@@ -107,7 +109,7 @@ class AuthController extends BaseController{
         } else {
             $_SESSION['errors']['OTP'] = "Codice OTP non valido o scaduto.";
             // echo "Codice OTP non valido o scaduto.";
-            redirect('verifica-otp');
+            redirect('authentication.verifica-otp');
         }
     }
 
