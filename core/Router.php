@@ -1,28 +1,25 @@
 <?php
 
-// Classe Router per gestire le rotte dell'applicazione
 class Router {
     private array $routes;
-    private string $basePath = '/gestore-eventi';
 
     public function __construct(array $routes) {
-        $this->routes = $this->prepareRoutes($routes);
+        $this->routes = $routes;
     }
 
-    public function handle(string $method, string $uri) {
-        $uri = rtrim(parse_url($uri, PHP_URL_PATH), '/') ?: '/';
-
-        if (str_starts_with($uri, $this->basePath)) {
-            $uri = substr($uri, strlen($this->basePath)) ?: '/';
-        }
+    public function handle(string $method, string $uri): void {
+        // Rimuove eventuali query string dalla URI
+        $uri = parse_url($uri, PHP_URL_PATH);
 
         foreach ($this->routes as $route) {
-            if ($route['method'] === $method && preg_match($route['pattern'], $uri, $matches)) {
-                array_shift($matches);
-                return $this->dispatch($route, $matches, $uri, $method);
+            if ($this->matchRoute($route, $method, $uri, $params)) {
+                // Match trovato → dispatch
+                $this->dispatch($route, $params, $uri, $method);
+                return;
             }
         }
 
+        // Nessuna route corrispondente → 404
         http_response_code(404);
         if (php_sapi_name() !== 'cli') {
             require 'views/404.php';
@@ -31,86 +28,86 @@ class Router {
         }
     }
 
-    private function dispatch(array $route, array $params = [], string $uri = '', string $method = '') {
-        if (!empty($route['authorized'])) {
-            if (!isset($_SESSION['user'])) {
-                http_response_code(401);
-                echo "Non autorizzato (utente non loggato)";
-                return;
-            }
-
-            if (!empty($route['role']) && !in_array($_SESSION['user']['ruolo'], $route['role'])) {
-                http_response_code(403);
-                echo "Accesso negato (ruolo insufficiente)";
-                return;
-            }
+    // Verifica se route corrisponde alla URI e al metodo
+    private function matchRoute(array $route, string $method, string $uri, ?array &$params): bool {
+        if ($route['method'] !== $method) {
+            return false;
         }
 
-        if ($method === 'POST' && !Csrf::check($_POST['_token'] ?? '')) {
-            http_response_code(419);
-            echo 'CSRF token mismatch';
-            return;
+        // Sostituisce {param} con (?P<param>[^/]+) per cattura nominativa
+        $pattern = preg_replace('/\{([a-zA-Z_][a-zA-Z0-9_]*)\}/', '(?P<\1>[^/]+)', $route['url']);
+        $pattern = '@^' . $pattern . '$@D';
+
+        // Esegue il match
+        if (preg_match($pattern, $uri, $matches)) {
+            // Estrae solo i parametri nominati
+            $params = array_filter(
+                $matches,
+                fn($key) => is_string($key),
+                ARRAY_FILTER_USE_KEY
+            );
+            return true;
         }
 
-        [$controllerPathPart, $methodName] = explode('@', $route['handler'] . '@index');
-        $controllerPath = __DIR__ . '/../controllers/' . $controllerPathPart . '.php';
-
-        if (!file_exists($controllerPath)) {
-            http_response_code(500);
-            echo "Controller file not found: $controllerPath";
-            return;
-        }
-
-        require_once $controllerPath;
-
-        $controllerClassName = basename($controllerPathPart);
-
-        if (!class_exists($controllerClassName)) {
-            http_response_code(500);
-            echo "Class $controllerClassName not found in $controllerPath";
-            return;
-        }
-
-        $controller = new $controllerClassName;
-
-        if (!method_exists($controller, $methodName)) {
-            http_response_code(500);
-            echo "Method $methodName not found in $controllerClassName";
-            return;
-        }
-
-        $params = empty($params) ? [$_REQUEST] : array_merge($params, [$_REQUEST]);
-
-        // if($method === 'GET' && isset($route['cache'])){
-        //     $cache = new CacheMiddleware();
-        //     echo $cache->handle($route['cache'][0],$route['cache'][1], function () use ($controller, $methodName, $params) {
-        //         echo $controller->$methodName(...$params);           
-        //     });
-        //     return;
-        // }       
-        $result = $controller->$methodName(...$params);
-
-        if ($result === null) {
-            http_response_code(404);
-            if (php_sapi_name() !== 'cli') {
-                require 'views/404.php';
-                exit;
-            } else {
-                echo "404 - Not Found";
-            }
-        }
-
-        echo $result;
-        return;
+        return false;
     }
 
-    private function prepareRoutes(array $routes): array {
-        foreach ($routes as &$route) {
-            if (!isset($route['pattern'])) {
-                $pattern = preg_replace('#\{[^/]+\}#', '([^/]+)', $route['url']);
-                $route['pattern'] = '#^' . $pattern . '$#';
-            }
+    // Esegue la route corrispondente con tutti i middleware
+    private function dispatch(array $route, array $params = [], string $uri = '', string $method = ''): void {
+        // Include i middleware disponibili
+        // require_once __DIR__ . '/../middleware/MiddlewareInterface.php';
+        // require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+        // require_once __DIR__ . '/../middleware/RoleMiddleware.php';
+        // require_once __DIR__ . '/../middleware/CsrfMiddleware.php';
+        // require_once __DIR__ . '/../middleware/OwnershipMiddleware.php';
+
+        $middlewareStack = [];
+
+        // Middleware: autenticazione
+        if (!empty($route['authorized'])) {
+            $middlewareStack[] = new AuthMiddleware();
         }
-        return $routes;
+
+        // Middleware: controllo ruolo
+        if (!empty($route['role'])) {
+            $middlewareStack[] = new RoleMiddleware($route['role']);
+        }
+
+        // Middleware: CSRF solo per POST
+        if ($method === 'POST') {
+            $middlewareStack[] = new CsrfMiddleware();
+        }
+
+        // Middleware: ownership (solo su rotte che lo richiedono veramente)
+        if (!empty($route['owner_check'])) {
+            $middlewareStack[] = new OwnershipMiddleware($route['handler']);
+        }
+
+        // Funzione finale da eseguire dopo i middleware → il controller
+        $run = function ($request) use ($route, $params) {
+            [$controllerPath, $methodName] = explode('@', $route['handler'] . '@index');
+            require_once __DIR__ . '/../controllers/' . $controllerPath . '.php';
+
+            $controllerClass = basename($controllerPath);
+            $controller = new $controllerClass();
+
+            $args = array_values($params);  // Parametri URI come ID ecc.
+            $args[] = $request;             // Aggiunge la request finale
+
+            return $controller->$methodName(...$args);
+        };
+
+        // 🔁 Merge tra parametri URI (es. id) e dati della richiesta
+        $mergedRequest = array_merge($_REQUEST, $params);
+
+        // Costruzione della pipeline dei middleware
+        $pipeline = array_reduce(
+            array_reverse($middlewareStack),
+            fn($next, $middleware) => fn($request) => $middleware->handle($request, $next),
+            $run
+        );
+
+        // Esecuzione
+        echo $pipeline($mergedRequest);
     }
 }

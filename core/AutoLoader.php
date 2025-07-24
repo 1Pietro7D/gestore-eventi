@@ -12,6 +12,7 @@ spl_autoload_register(function ($class) {
         __DIR__ . '/../database/',      // Cartella per la gestione del database
         __DIR__ . '/../orm/',           // Cartella del orm 
         __DIR__ . '/../utils/',         // Cartella con file generici (es: Gmail, Cart)
+        __DIR__ . '/../middleware/',         // Cartella con Middleware
     ];
 
     // Scorre ciascun percorso definito sopra

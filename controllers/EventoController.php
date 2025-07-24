@@ -20,12 +20,16 @@ class EventoController extends BaseController{
     public function show($id) { 
         $userId = $_SESSION['user']['id'] ?? 'guest';  // fallback se non loggato
         $cacheKey = "eventi_show_{$id}_{$userId}";
-
+        if (!is_numeric($id)) {
+            http_response_code(400);
+            exit("ID evento non valido.");
+        }
         $evento = Cache::remember($cacheKey, 10, function () use ($id) {
             return $this->eventoRepository->findById($id);
         });
+
         if (!$evento) {
-                return "Evento non trovato."; 
+            return "Evento non trovato."; 
         }
         // if ($evento->utente_id != $_SESSION['user']['id']) {
         //     return "Non sei autorizzato a vedere questo evento.";   
@@ -79,15 +83,15 @@ class EventoController extends BaseController{
     public function edit($id) {
         $evento = $this->eventoRepository->findById($id);
 
-        if (!$evento) {
-            echo "Evento non trovato.";
-            return;
-        }
+        // if (!$evento) {
+        //     echo "Evento non trovato.";
+        //     return;
+        // }
 
-        if ($evento->utente_id != $_SESSION['user']['id']) {
-            echo "Non sei autorizzato a modificare questo evento.";
-            return;
-        }
+        // if ($evento->utente_id != $_SESSION['user']['id']) {
+        //     echo "Non sei autorizzato a modificare questo evento.";
+        //     return;
+        // }
         
         $categoriaRepo = new CategoriaRepository();
         $categorie = $categoriaRepo->all();
@@ -127,10 +131,10 @@ class EventoController extends BaseController{
             'prezzo' => $prezzo,
         ];
         $evento = $this->eventoRepository->findById($id);
-        if ($evento->utente_id != $_SESSION['user']['id']) {
-            echo "Non sei autorizzato a modificare questo evento.";
-            return;
-        }
+        // if ($evento->utente_id != $_SESSION['user']['id']) {
+        //     echo "Non sei autorizzato a modificare questo evento.";
+        //     return;
+        // }
         $img_path = $this->uploadMedia($_FILES['img_file'], 'upload', $evento->img_path);
         $data['img_path'] = $img_path;
         
@@ -148,14 +152,14 @@ class EventoController extends BaseController{
     // POST /eventi/{id}/delete
     public function destroy($id) {
         $evento = $this->eventoRepository->findById($id);
-        if (!$evento) {
-            echo "Evento non trovato.";
-            return;
-        }
-        if ($evento->utente_id != $_SESSION['user']['id']) {
-            echo "Non sei autorizzato a eliminare questo evento.";
-            return;
-        }
+        // if (!$evento) {
+        //     echo "Evento non trovato.";
+        //     return;
+        // }
+        // if ($evento->utente_id != $_SESSION['user']['id']) {
+        //     echo "Non sei autorizzato a eliminare questo evento.";
+        //     return;
+        // }
 
         $this->deleteMedia($evento->img_path);
         $this->deleteMedia($evento->video_path);  
@@ -171,10 +175,13 @@ class EventoController extends BaseController{
 
     public function iscriviti($id) {
         if (!isset($_SESSION['user'])) {
-            redirect('login');
+            redirect('authentication.login');
             return;
         }
-    
+        if (!is_numeric($id)) {
+            http_response_code(400);
+            exit("ID evento non valido.");
+        }
         $evento = $this->eventoRepository->findById($id);
         if (!$evento) {
             echo "Evento non trovato.";
@@ -207,11 +214,15 @@ class EventoController extends BaseController{
     }
 
     public function annullaIscrizione($id) {
+        
         if (!isset($_SESSION['user'])) {
-            redirect('login');
+            redirect('authentication.login');
             return;
         }
-
+        if (!is_numeric($id)) {
+            http_response_code(400);
+            exit("ID evento non valido.");
+        }
         $evento = $this->eventoRepository->findById($id);
         if (!$evento) {
             echo "Evento non trovato.";
