@@ -14,7 +14,7 @@ class CheckoutController extends BaseController{
     $items = Cart::items();
 
     if (empty($items)) {
-        FlashMessages::add('error', 'Il tuo carrello � vuoto.');
+        FlashMessages::add('error', 'Il tuo carrello è vuoto.');
         redirect('cart.index');
     }
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
