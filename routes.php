@@ -11,6 +11,7 @@
  * ]
  */
 return [
+    ['method' => 'GET',    'url' => '/api/home',  'handler' => 'Api/ApiHomeController@index' ],
     [ 'method' => 'GET',    'url' => '/',                      'handler' => 'HomeController@index', 'view'=> 'home' ],
    
     [ 'method' => 'GET',    'url' => '/login',                 'handler' => 'Auth/AuthController@showLogin' , 'view'=> 'authentication.login'],
