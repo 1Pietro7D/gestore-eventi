@@ -92,49 +92,49 @@ abstract class BaseRepository implements RepositoryInterface {
     }
 
     public function paginate(int $perPagina = 15, string $baseUrl = ""): array {
-    $pagina = isset($_GET['pagina']) ? max(1, (int)$_GET['pagina']) : 1;
-    $offset = ($pagina - 1) * $perPagina;
+        $pagina = isset($_GET['pagina']) ? max(1, (int)$_GET['pagina']) : 1;
+        $offset = ($pagina - 1) * $perPagina;
 
-    [$where, $params] = $this->buildWhereClause();
+        [$where, $params] = $this->buildWhereClause();
 
-    // Conteggio totale
-    $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} $where");
-    $stmt->execute($params);
-    $total = (int) $stmt->fetchColumn();
-    $lastPage = (int) ceil($total / $perPagina);
+        // Conteggio totale
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} $where");
+        $stmt->execute($params);
+        $total = (int) $stmt->fetchColumn();
+        $lastPage = (int) ceil($total / $perPagina);
 
-    // Query con LIMIT/OFFSET
-    $sql = "SELECT * FROM {$this->table} $where LIMIT :limit OFFSET :offset";
-    $stmt = $this->db->prepare($sql);
-    foreach ($params as $param => $val) {
-        $stmt->bindValue($param, $val);
+        // Query con LIMIT/OFFSET
+        $sql = "SELECT * FROM {$this->table} $where LIMIT :limit OFFSET :offset";
+        $stmt = $this->db->prepare($sql);
+        foreach ($params as $param => $val) {
+            $stmt->bindValue($param, $val);
+        }
+        $stmt->bindValue(':limit', $perPagina, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $data = array_map(fn($row) => new $this->modelClass($row), $rows);
+
+        $this->filters = []; // reset filtri dopo la query
+
+        // Path base per URL
+        $baseUrl = $baseUrl ?? self::currentUrlWithoutQuery(['pagina']);
+
+        return [
+            'total' => $total,
+            'per_page' => $perPagina,
+            'current_page' => $pagina,
+            'last_page' => $lastPage,
+            'first_page_url' => "{$baseUrl}?pagina=1",
+            'last_page_url' => "{$baseUrl}?pagina={$lastPage}",
+            'next_page_url' => $pagina < $lastPage ? "{$baseUrl}?pagina=" . ($pagina + 1) : null,
+            'prev_page_url' => $pagina > 1 ? "{$baseUrl}?pagina=" . ($pagina - 1) : null,
+            'path' => $baseUrl,
+            'from' => $total > 0 ? ($offset + 1) : null,
+            'to' => $total > 0 ? min($offset + $perPagina, $total) : null,
+            'data' => $data,
+        ];
     }
-    $stmt->bindValue(':limit', $perPagina, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-    $stmt->execute();
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $data = array_map(fn($row) => new $this->modelClass($row), $rows);
-
-    $this->filters = []; // reset filtri dopo la query
-
-    // Path base per URL
-    $baseUrl = $baseUrl ?? self::currentUrlWithoutQuery(['pagina']);
-
-    return [
-        'total' => $total,
-        'per_page' => $perPagina,
-        'current_page' => $pagina,
-        'last_page' => $lastPage,
-        'first_page_url' => "{$baseUrl}?pagina=1",
-        'last_page_url' => "{$baseUrl}?pagina={$lastPage}",
-        'next_page_url' => $pagina < $lastPage ? "{$baseUrl}?pagina=" . ($pagina + 1) : null,
-        'prev_page_url' => $pagina > 1 ? "{$baseUrl}?pagina=" . ($pagina - 1) : null,
-        'path' => $baseUrl,
-        'from' => $total > 0 ? ($offset + 1) : null,
-        'to' => $total > 0 ? min($offset + $perPagina, $total) : null,
-        'data' => $data,
-    ];
-}
 
     protected static function currentUrlWithoutQuery(array $except = []): string {
         $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";

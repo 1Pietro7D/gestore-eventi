@@ -22,7 +22,7 @@ class Router {
         // Nessuna route corrispondente → 404
         http_response_code(404);
         if (php_sapi_name() !== 'cli') {
-            require 'views/404.php';
+            require 'resources/views/error/404.php';
         } else {
             echo "404 - Not Found";
         }

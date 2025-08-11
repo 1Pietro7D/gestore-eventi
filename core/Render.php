@@ -4,7 +4,7 @@
 function view(string $path, array $data = []): string {
     // Costruisce il percorso completo del file view
     // Esempio: 'utenti.index' diventa '/views/utenti/index.php'
-    $viewFile = __DIR__ . '/../views/' . str_replace('.', '/', $path) . '.php';
+    $viewFile = __DIR__ . '/../resources/views/' . str_replace('.', '/', $path) . '.php';
 
     // Controlla se il file della view esiste
     if (!file_exists($viewFile)) {
@@ -19,10 +19,10 @@ function view(string $path, array $data = []): string {
     // Avvia il buffer di output: cattura tutto l'output del file PHP incluso
     ob_start();
 
-    // Include la view: il contenuto generato sarà catturato dal buffer
+    // Include la view: il contenuto generato sarÃ  catturato dal buffer
     require $viewFile;
 
-    // Restituisce tutto ciò che è stato catturato (il contenuto HTML)
+    // Restituisce tutto ciÃ² che Ã¨ stato catturato (il contenuto HTML)
     return ob_get_clean();
 }
 function redirect(string $viewName, array $params = []) {
@@ -56,7 +56,7 @@ function redirect(string $viewName, array $params = []) {
         exit;
     } elseif (count($matches) > 1) {
         http_response_code(500);
-        echo "Errore: Trovate più route con view '$viewName'.";
+        echo "Errore: Trovate piÃ¹ route con view '$viewName'.";
         exit;
     } else {
         http_response_code(500);

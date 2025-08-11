@@ -1,0 +1,17 @@
+/* styles.css - stilizzazione centralizzata */
+.container { margin: 40px auto; max-width: 500px; background-color: #f2f2f2; padding: 40px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+.text-primary { color: #333; }
+.mt-10 { margin-top: 10px; }
+.text-error { color: red; margin-bottom: 15px; }
+.alert-box { background-color: #f2f2f2; padding: 20px; border-radius: 5px; text-align: center; }
+.btn-inline { display: inline-block; margin: 10px; font-size: 1.2rem; }
+.text-success { color: green; margin-bottom: 15px; }
+.btn { background-color: white; color: #333; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+.text-muted { color: #666; }
+.form-control { font-size: 16px; padding: 10px; width: 100%; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc; }
+.heading { font-size: 24px; color: #333; }
+.btn-primary { background-color: #007bff; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; }
+.font-bold { font-weight: bold; }
+.mt-20 { margin-top: 20px; }
+.card { font-family: Arial, sans-serif; background-color: #fafafa; padding: 20px; border-radius: 10px; max-width: 600px; margin: 50px auto; text-align: center; }
+.error{ color: red; }
