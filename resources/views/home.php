@@ -70,7 +70,7 @@
                     
                     <div>
                         <?php if ($evento->img_path): ?>
-                            <img src="/public<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="100">
+                            <img src="<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="100">
                         <?php else: ?>
                             <p>Nessuna immagine</p>
                         <?php endif; ?>
@@ -78,7 +78,7 @@
 
                     <div>
                         <?php if ($evento->video_path): ?>
-                            <a href="/public<?= htmlspecialchars($evento->video_path) ?>" target="_blank">Guarda Video</a>
+                            <a href="<?= htmlspecialchars($evento->video_path) ?>" target="_blank">Guarda Video</a>
                         <?php else: ?>
                             <p>Nessun video</p>
                         <?php endif; ?>
