@@ -7,7 +7,7 @@ $cartCount = Cart::count();
         <?php endif; ?>
     </a>
 
-<style>
+    <style nonce="<?= htmlspecialchars($GLOBALS['CSP_NONCE']) ?>">
 .cart-link {
     position: relative;
     text-decoration: none;

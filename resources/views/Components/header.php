@@ -24,7 +24,7 @@
     </ul>
 </nav>
 
-<style>
+<style nonce="<?= htmlspecialchars($GLOBALS['CSP_NONCE']) ?>">
     nav{
         display: flex;
         justify-content: space-between;

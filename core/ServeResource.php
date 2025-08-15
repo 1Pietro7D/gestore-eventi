@@ -27,11 +27,11 @@ function serveStaticResource(string $resourcesDir = __DIR__ . '/../resources'): 
     // 🔐 Controllo Referer e token CSRF
     $referer = $_SERVER['HTTP_REFERER'] ?? '';
     $host = $_SERVER['HTTP_HOST'];
-    $token = $_GET['token'] ?? '';
+    //$token = $_GET['token'] ?? '';
 
-    $csrfValid = method_exists('Csrf', 'check') ? Csrf::check($token) : false;
+    //$csrfValid = method_exists('Csrf', 'check') ? Csrf::check($token) : false;
 
-    if (!str_contains($referer, $host) && !$csrfValid) {
+    if (!str_contains($referer, $host) /*&& !$csrfValid*/) {
         http_response_code(403);
         echo 'Forbidden';
         exit;

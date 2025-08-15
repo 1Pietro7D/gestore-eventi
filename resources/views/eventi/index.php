@@ -30,7 +30,7 @@
                     <td><p>Iscritti: <?= $evento->numeroIscritti() ?> / <?= $evento->massimo_partecipanti ?></p></td>
                     <td>
                         <?php if ($evento->img_path): ?>
-                            <img src="/public<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="100">
+                            <img src="<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="100">
                         <?php else: ?>
                             Nessuna immagine
                         <?php endif; ?>
@@ -46,12 +46,12 @@
                         <?= htmlspecialchars($evento->categoria->nome) ?>
                     </td>
                     <td>
-                        €<?= htmlspecialchars($evento->prezzo) ?>
+                    â‚¬<?= htmlspecialchars($evento->prezzo) ?>
                     </td>
                     <td>
                         <a href="/eventi/show/<?= $evento->id ?>">Visualizza</a> |
                         <a href="/eventi/edit/<?= $evento->id ?>">Modifica</a> |
-                        <form action="/eventi/delete/<?= $evento->id ?>" method="POST" style="display:inline;" onsubmit="return confirm('Sei sicuro di voler eliminare questo evento?');">
+                        <form action="/eventi/delete/<?= $evento->id ?>" method="POST" class="d-inline" onsubmit="return confirm('Sei sicuro di voler eliminare questo evento?');">
                             <button type="submit">Elimina</button>
                         </form>
                     </td>
@@ -60,3 +60,9 @@
         </tbody>
     </table>
 <?php endif; ?>
+<!-- CSS inline protetto -->
+<style nonce="<?= $GLOBALS['CSP_NONCE'] ?>">
+        .d-inline{
+            display: inline;
+        }
+    </style>

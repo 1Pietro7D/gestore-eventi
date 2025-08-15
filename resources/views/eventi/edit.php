@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Modifica Evento</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    
 
+    <style nonce="<?= $GLOBALS['CSP_NONCE'] ?>">
+        #map {
+            height: 300px;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
     <?php require_once __DIR__ . '/../Components/header.php'; ?>
+
     <h1>Modifica Evento</h1>
 
     <?php if (!empty($_SESSION['errors'])): ?>
@@ -27,6 +32,7 @@
 
     <form action="/eventi/update/<?= $evento->id ?>" method="POST" enctype="multipart/form-data">
         <?= csrf_field() ?>
+
         <div>
             <label for="titolo">Titolo:</label><br>
             <input type="text" id="titolo" name="titolo" value="<?= htmlspecialchars($evento->titolo) ?>" required>
@@ -41,11 +47,12 @@
             <label for="data_evento">Data Evento:</label><br>
             <input type="date" id="data_evento" name="data_evento" value="<?= htmlspecialchars($evento->data_evento) ?>" required>
         </div>
+
         <div>
             <label for="prezzo">Prezzo (€):</label><br>
-            <input type="number" id="prezzo" name="prezzo" min="0" step="0.01"
-                value="<?= htmlspecialchars($evento->prezzo) ?>" required>
-        </div> 
+            <input type="number" id="prezzo" name="prezzo" min="0" step="0.01" value="<?= htmlspecialchars($evento->prezzo) ?>" required>
+        </div>
+
         <div>
             <label for="categoria_id">Categoria:</label><br>
             <select name="categoria_id" id="categoria_id" required>
@@ -65,7 +72,7 @@
 
         <div>
             <label>Seleziona la posizione sulla mappa:</label>
-            <div id="map" style="height: 300px; margin-bottom: 1rem;"></div>
+            <div id="map"></div>
             <input type="hidden" name="latitudine" id="latitudine" value="<?= $evento->latitudine ?>">
             <input type="hidden" name="longitudine" id="longitudine" value="<?= $evento->longitudine ?>">
         </div>
@@ -89,7 +96,7 @@
 
     <p><strong>Immagine:</strong><br>
     <?php if ($evento->img_path): ?>
-        <img src="/public<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="300">
+        <img src="<?= htmlspecialchars($evento->img_path) ?>" alt="Immagine Evento" width="300">
     <?php else: ?>
         Nessuna immagine disponibile.
     <?php endif; ?>
@@ -98,7 +105,7 @@
     <p><strong>Video:</strong><br>
     <?php if ($evento->video_path): ?>
         <video width="320" height="240" controls>
-            <source src="/public<?= htmlspecialchars($evento->video_path) ?>">
+            <source src="<?= htmlspecialchars($evento->video_path) ?>">
             Il tuo browser non supporta il tag video.
         </video>
     <?php else: ?>
@@ -108,18 +115,20 @@
 
     <br><a href="/eventi/show/<?= $evento->id ?>">Torna ai dettagli evento</a>
 
+    <script nonce="<?= $GLOBALS['CSP_NONCE'] ?>">
+        // Override default icon paths di Leaflet
+        L.Icon.Default.mergeOptions({
+            iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+            iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+            shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+        });
 
-    <script>
         const lat = <?= $evento->latitudine ?? 'null' ?>;
         const lng = <?= $evento->longitudine ?? 'null' ?>;
-
-        const defaultLat = 41.9028; // Roma
+        const defaultLat = 41.9028;
         const defaultLng = 12.4964;
 
-        const map = L.map('map').setView(
-            [lat ?? defaultLat, lng ?? defaultLng],
-            13
-        );
+        const map = L.map('map').setView([lat ?? defaultLat, lng ?? defaultLng], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -127,20 +136,17 @@
         }).addTo(map);
 
         let marker = null;
-
         if (lat !== null && lng !== null) {
             marker = L.marker([lat, lng]).addTo(map);
         }
 
-        map.on('click', function (e) {
+        map.on('click', function(e) {
             const { lat, lng } = e.latlng;
-
             if (marker) {
                 marker.setLatLng([lat, lng]);
             } else {
                 marker = L.marker([lat, lng]).addTo(map);
             }
-
             document.getElementById('latitudine').value = lat;
             document.getElementById('longitudine').value = lng;
         });

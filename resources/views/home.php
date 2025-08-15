@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-    <style>
+    <style nonce="<?= htmlspecialchars($GLOBALS['CSP_NONCE']) ?>">
         .container {
             display: flex;
             flex-wrap: wrap;
