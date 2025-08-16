@@ -21,7 +21,7 @@ abstract class Model {
             return $this->relations[$name];
         }
 
-        trigger_error("Propriet‡ o relazione '$name' non definita nella classe " . get_class($this), E_USER_NOTICE);
+        trigger_error("Propriet√† o relazione '$name' non definita nella classe " . get_class($this), E_USER_NOTICE);
         return null;
     }
 }

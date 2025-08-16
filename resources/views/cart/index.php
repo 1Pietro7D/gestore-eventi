@@ -13,6 +13,7 @@
             <td><?= number_format($item['prodotto']->prezzo * $item['quantita'], 2) ?> €</td>
             <td>
                 <form method="POST" action="/carrello/rimuovi/<?= $id ?>">
+                    <?= csrf_field() ?>
                     <button type="submit">Rimuovi</button>
                 </form>
             </td>

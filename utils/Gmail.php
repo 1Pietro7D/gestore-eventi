@@ -2,14 +2,6 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// require __DIR__ . '/../vendor/autoload.php'; // Assicuriamoci che PHPMailer sia installato via Composer
-
-// use Dotenv\Dotenv;
-// // Creiamo un'istanza di Dotenv puntando alla directory del progetto
-// $dotenv = Dotenv::createImmutable(dirname(__DIR__));
-// Carichiamo le variabili d'ambiente dal file .env
-// $dotenv->load();
-
 /**
  * Invia un'email tramite Gmail SMTP
  * @param string $subject   Oggetto dell'email

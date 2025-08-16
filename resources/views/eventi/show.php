@@ -101,6 +101,7 @@
     ): ?>
         <a href="/eventi/edit/<?= $evento->id ?>">Modifica Evento</a> |
         <form action="/eventi/delete/<?= $evento->id ?>" method="POST" class="d-inline" onsubmit="return confirm('Sei sicuro di voler eliminare questo evento?');">
+            <?= csrf_field() ?>    
             <button type="submit">Elimina Evento</button>
         </form>
     <?php endif; ?>
@@ -132,6 +133,7 @@
     <?php endif; ?>
 
     <form method="POST" action="/carrello/aggiungi/<?= $evento->id ?>">
+        <?= csrf_field() ?>
         <label for="quantità">Quantità:</label>
         <input type="number" id="quantità" name="quantita" value="1" min="1" max="10" required>
         <button type="submit">Aggiungi al carrello</button>

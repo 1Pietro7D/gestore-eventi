@@ -7,14 +7,14 @@ class EventoRepository extends BaseRepository {
     protected string $modelClass = Evento::class;
 
     /**
-     * Crea un nuovo evento solo se l'utente è admin.
+     * Crea un nuovo evento solo se l'utente ï¿½ admin.
      * @param array $data (deve contenere almeno 'utente_id')
      * @return Evento
-     * @throws Exception se l'utente non è admin
+     * @throws Exception se l'utente non ï¿½ admin
      */
     public function create(array $data): Evento {
         if (!isset($data['utente_id'])) {
-            throw new InvalidArgumentException("utente_id è obbligatorio per creare un evento.");
+            throw new InvalidArgumentException("utente_id Ã¨ obbligatorio per creare un evento.");
         }
 
         // Verifica che l'utente sia admin

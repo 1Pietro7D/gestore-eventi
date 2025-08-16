@@ -7,7 +7,7 @@ class Evento extends Prodotto {
     public ?string $img_path = null;
     public ?string $video_path = null;
     public int $utente_id = 0;
-    public int $categoria_id = 0; // non null perché obbligatorio
+    public int $categoria_id = 0; // non null perchÃ¨ obbligatorio
     public int $massimo_partecipanti = 100; 
     public ?float $latitudine = null; 
     public ?float $longitudine = null; 

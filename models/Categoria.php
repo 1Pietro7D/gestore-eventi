@@ -5,6 +5,4 @@ class Categoria extends Model {
     public string $nome = '';
     public string $created_at= '';
     public string $updated_at= '';
-
-   
 }

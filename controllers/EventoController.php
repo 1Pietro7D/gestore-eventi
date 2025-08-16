@@ -191,7 +191,7 @@ class EventoController extends BaseController{
         $repo = new EventoIscrizioneRepository();
     
         if ($repo->exists($evento->id, $_SESSION['user']['id'])) {
-            $_SESSION['errors'][] = "Sei gi� iscritto a questo evento.";
+            $_SESSION['errors'][] = "Sei già iscritto a questo evento.";
             redirect('eventi.show', ['id' => $evento->id]);
             return;
         }

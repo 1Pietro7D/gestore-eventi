@@ -18,7 +18,7 @@ class EventoIscrizioneRepository extends BaseRepository {
     }
 
     /**
-     * Verifica se un utente Ë gi‡ iscritto a un evento.
+     * Verifica se un utente √® gi√† iscritto a un evento.
      */
     public function exists(int $eventoId, int $utenteId): bool {
         $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} WHERE evento_id = ? AND utente_id = ?");
@@ -49,7 +49,7 @@ class EventoIscrizioneRepository extends BaseRepository {
     }
 
     /**
-     * Restituisce tutti gli ID di eventi a cui Ë iscritto un utente.
+     * Restituisce tutti gli ID di eventi a cui √® iscritto un utente.
      */
     public function findEventiByUtenteId(int $utenteId): array {
         $stmt = $this->db->prepare("
@@ -98,8 +98,8 @@ class EventoIscrizioneRepository extends BaseRepository {
 
 
 // countByEventoId	Quanti iscritti ha un evento
-// exists	Verifica se un utente Ë gi‡ iscritto
+// exists	Verifica se un utente √® gi√† iscritto
 // create	Crea una nuova iscrizione
 // deleteByEventoAndUtente	Annulla una iscrizione
-// findEventiByUtenteId	Lista eventi a cui un utente Ë iscritto
+// findEventiByUtenteId	Lista eventi a cui un utente √® iscritto
 // findUtentiByEventoId	Lista utenti iscritti a un evento
