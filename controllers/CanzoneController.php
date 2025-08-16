@@ -1,9 +1,9 @@
 <?php
-class CanzoniController extends BaseController {
-    protected CanzoniRepository $repo;
+class CanzoneController extends BaseController {
+    protected CanzoneRepository $repo;
 
     public function __construct() {
-        $this->repo = new CanzoniRepository();
+        $this->repo = new CanzoneRepository();
     }
 
     public function index() {
@@ -17,8 +17,7 @@ class CanzoniController extends BaseController {
     }
 
     public function create() {
-        $canzone = new Canzone();
-        return view('canzoni.create', compact('canzone'));
+        return view('canzoni.create');
     }
 
     public function store($request) {

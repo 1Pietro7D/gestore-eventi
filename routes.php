@@ -56,4 +56,13 @@ return [
     ['method' => 'GET',  'url' => '/checkout',                 'handler' => 'CheckoutController@index'],
     ['method' => 'GET',  'url' => '/checkout/successo',        'handler' => 'CheckoutController@success'],
     ['method' => 'GET',  'url' => '/checkout/cancellato',      'handler' => 'CheckoutController@cancel'],
+
+    // CANZONI
+    [ 'method' => 'GET',   'url' => '/canzoni',                 'handler' => 'CanzoneController@index', 'view' => 'canzoni.index' ],
+    [ 'method' => 'GET',   'url' => '/canzoni/admin',           'handler' => 'CanzoneController@admin',  'authorized' => true, 'role' => ['superadmin'], 'view' => 'canzoni.admin' ],
+    [ 'method' => 'GET',   'url' => '/canzoni/create',          'handler' => 'CanzoneController@create', 'authorized' => true, 'role' => ['superadmin'], 'view' => 'canzoni.create'  ],
+    [ 'method' => 'POST',  'url' => '/canzoni/store',           'handler' => 'CanzoneController@store',  'authorized' => true, 'role' => ['superadmin']],
+    [ 'method' => 'GET',   'url' => '/canzoni/edit/{id}',       'handler' => 'CanzoneController@edit',   'authorized' => true, 'role' => ['superadmin'], 'view' => 'canzoni.edit', 'owner_check' => true ],
+    [ 'method' => 'POST',  'url' => '/canzoni/update/{id}',     'handler' => 'CanzoneController@update', 'authorized' => true, 'role' => ['superadmin'], 'owner_check' => true ] ,
+    [ 'method' => 'POST',  'url' => '/canzoni/delete/{id}',     'handler' => 'CanzoneController@destroy','authorized' => true, 'role' => ['superadmin'], 'owner_check' => true  ],
 ];
