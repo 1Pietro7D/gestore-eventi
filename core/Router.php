@@ -7,19 +7,32 @@ class Router {
         $this->routes = $routes;
     }
 
-    public function handle(string $method, string $uri): void {
-        // Rimuove eventuali query string dalla URI
-        $uri = parse_url($uri, PHP_URL_PATH);
-
+    public function handle(string $method, ?string $uri): void {
+        // Imposta un fallback sicuro
+        $uri = $uri ?? $_SERVER['REQUEST_URI'] ?? '/';
+        // ❗ Protezione: se URI inizia con doppio slash → 404
+        if (!is_string($uri) || preg_match('#^//+#', $uri)) {
+            http_response_code(404);
+            if (php_sapi_name() !== 'cli') {
+                require 'resources/views/error/404.php';
+            } else {
+                echo "404 - Not Found";
+            }
+            return;
+        }
+        
+        // Estrai il path e fallback su '/' se fallisce
+        $uri = parse_url($uri, PHP_URL_PATH) ?? '/';
+    
+        
+    
         foreach ($this->routes as $route) {
             if ($this->matchRoute($route, $method, $uri, $params)) {
-                // Match trovato → dispatch
                 $this->dispatch($route, $params, $uri, $method);
                 return;
             }
         }
-
-        // Nessuna route corrispondente → 404
+    
         http_response_code(404);
         if (php_sapi_name() !== 'cli') {
             require 'resources/views/error/404.php';
@@ -27,7 +40,7 @@ class Router {
             echo "404 - Not Found";
         }
     }
-
+    
     // Verifica se route corrisponde alla URI e al metodo
     private function matchRoute(array $route, string $method, string $uri, ?array &$params): bool {
         if ($route['method'] !== $method) {

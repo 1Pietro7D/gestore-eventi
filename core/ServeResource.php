@@ -3,9 +3,10 @@ function serveStaticResource(string $resourcesDir = __DIR__ . '/../resources'): 
 {
     // Ottieni path richiesto dal PATH_INFO o REQUEST_URI
     $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    
     $basePath = '/resources/';
 
-    if (!str_starts_with($uriPath, $basePath)) {
+    if (!is_string($uriPath) || !str_starts_with($uriPath, $basePath)) {
         return; // non è una richiesta a /resources
     }
 
@@ -72,7 +73,8 @@ function serveUploadResource(string $uploadsDir = __DIR__ . '/../public/upload')
     $basePath = '/upload/';
 
     // Se l'URL non inizia con /upload/, non gestiamo la richiesta
-    if (!str_starts_with($uriPath, $basePath)) {
+    if (!is_string($uriPath) || !str_starts_with($uriPath, $basePath)) {
+
         return;
     }
 

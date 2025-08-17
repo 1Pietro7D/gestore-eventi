@@ -65,7 +65,7 @@
           <td><?= (int)$c->utente_id ?></td> <!-- stampa proprietario -->
           <td> <!-- cella azioni -->
             <a class="btn" href="/canzoni/edit/<?= (int)$c->id ?>">Modifica</a> <!-- link modifica -->
-            <form action="/canzoni/delete/<?= (int)$c->id ?>" method="post" style="display:inline" onsubmit="return confirm('Eliminare definitivamente?')"> <!-- form elimina -->
+            <form action="/canzoni/delete/<?= (int)$c->id ?>" method="post" class="d-inline" onsubmit="return confirm('Eliminare definitivamente?')"> <!-- form elimina -->
               <?= csrf_field() ?> <!-- token csrf -->
               <button class="btn btn-danger" type="submit">Elimina</button> <!-- bottone -->
             </form> <!-- fine form -->
@@ -78,6 +78,7 @@
 
 <style>
 /* stile admin con thumbnail */
+.d-inline{ display : inline}
 .container{max-width:1100px;margin:2rem auto;padding:1rem} /* layout container */
 .table{width:100%;border-collapse:collapse} /* tabella */
 .table th,.table td{border:1px solid #ddd;padding:.5rem;text-align:left;vertical-align:middle} /* celle */

@@ -51,11 +51,11 @@
     <?php $vid = $canzone->getYouTubeId(); ?> <!-- calcola ID per anteprima iniziale -->
     <div id="preview" class="ratio-16x9" style="<?= $vid ? '' : 'display:none' ?>"> <!-- mostra se ID presente -->
       <iframe
-        title="Anteprima YouTube" <!-- titolo accessibile -->
-        frameborder="0" <!-- no bordo -->
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" <!-- abilita feature -->
-        allowfullscreen <!-- fullscreen -->
-        <?php if ($vid): ?>src="https://www.youtube-nocookie.com/embed/<?= htmlspecialchars($vid) ?>"<?php endif; ?> <!-- src iniziale se disponibile -->
+        title="Anteprima YouTube"
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        allowfullscreen 
+        <?php if ($vid): ?>src="https://www.youtube-nocookie.com/embed/<?= htmlspecialchars($vid) ?>"<?php endif; ?> 
       ></iframe> <!-- chiusura iframe -->
     </div> <!-- fine anteprima -->
 
